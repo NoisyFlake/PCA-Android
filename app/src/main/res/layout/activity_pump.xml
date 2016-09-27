@@ -8,12 +8,12 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <TextView
-        android:text="@string/label_pump_activity"
+        android:text="@string/title_pump"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/padding_l"
         android:id="@+id/textView"
-        android:textSize="30sp" />
+        android:textSize="@dimen/text_size_l" />
 
     <LinearLayout
         android:layout_width="match_parent"
