@@ -1,13 +1,24 @@
 <resources>
     <string name="app_name">PCA App</string>
 
+    <string name="dosage_result_ml">0 ml</string>
+    <string name="dosage_result_mg">0 mg</string>
+
+    <string name="label_basal_rate">Basalrate mg/h</string>
     <string name="label_boli_per_hour">Boli pro Stunde</string>
     <string name="label_bolus_amount">Bolusmenge</string>
+    <string name="label_bolus_offtime">Bolussperrzeit</string>
     <string name="label_cartridge">Kassettenvolumen in ml</string>
-    <string name="label_days">Betriebstage in Tagen</string>
-    <string name="label_dose">Dosierung in mg/h</string>
+    <string name="label_dosage">Konzentration</string>
+    <string name="label_duration">Laufzeit</string>
+    <string name="label_indrigend_quantity">Wirkstoffmenge</string>
     <string name="label_number_hint">0</string>
 
+    <string-array name="array_volume_cartridge">
+        <item>50ml</item>
+        <item>100ml</item>
+        <item>250ml</item>
+    </string-array>
     <string-array name="array_unit_volume">
         <item>mg</item>
         <item>ml</item>

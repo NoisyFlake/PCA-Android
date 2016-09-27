@@ -4,35 +4,31 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
     tools:context="de.bk_alsdorf.pcaapp.MainActivity"
-    android:forceHasOverlappingRendering="false"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:scrollbars="horizontal|vertical">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:paddingBottom="@dimen/padding_md">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/label_dose"
-            android:id="@+id/doseLabel" />
+            android:text="@string/label_basal_rate"
+            android:id="@+id/basalRateLabel" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/doseInput"
+            android:id="@+id/basalRateInput"
             android:hint="@string/label_number_hint" />
 
     </LinearLayout>
@@ -41,31 +37,6 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingBottom="@dimen/padding_md" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_days"
-            android:id="@+id/daysLabel" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/daysInput"
-            android:hint="@string/label_number_hint" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:paddingBottom="@dimen/padding_md" >
 
         <TextView
@@ -74,111 +45,86 @@
             android:text="@string/label_cartridge"
             android:id="@+id/cartridgeLabel" />
 
+        <Spinner
+            android:layout_width="fill_parent"
+            android:id="@+id/cartridgeSpinner"
+            android:layout_height="40dp"
+            android:entries="@array/array_volume_cartridge"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding_md" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_duration"
+            android:id="@+id/daysLabel" />
+
+        <SeekBar
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="14"
+            android:progress="10"
+            android:id="@+id/durationSeekBar" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding_md">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_indrigend_quantity"
+            android:id="@+id/indrigendQuantityLabel" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/cartridgeInput"
+            android:id="@+id/indrigendQuantityInput"
             android:hint="@string/label_number_hint" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingBottom="@dimen/padding_md" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_boli_per_hour"
-            android:id="@+id/boliPerHourLabel" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/boliPerHourInput"
-            android:hint="@string/label_number_hint" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingBottom="@dimen/padding_md" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_bolus_amount"
-            android:id="@+id/bolusAmountLabel" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/bolusAmountInput"
-                android:hint="@string/label_number_hint" />
-
-            <Spinner
-                android:layout_width="fill_parent"
-                android:layout_height="75dp"
-                android:id="@+id/spinner"
-                android:spinnerMode="dropdown"
-                android:entries="@array/array_unit_volume"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingBottom="@dimen/padding_md" >
+        android:padding="@dimen/padding_md"
+        android:background="@color/colorPrimary">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/label_bolus_amount"
-            android:id="@+id/bolusOffTimeLabel" />
+            android:text="@string/label_dosage"
+            android:id="@+id/dosageLabel"
+            android:textColor="@android:color/white" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <TextView
+            android:layout_height="wrap_content"
+            android:text="@string/dosage_result_mg"
+            android:id="@+id/dosageResultMg"
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/white"
+            android:layout_marginLeft="12dp" />
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/bolusOffTimeInput"
-                android:hint="@string/label_number_hint" />
-
-            <Spinner
-                android:layout_width="fill_parent"
-                android:layout_height="75dp"
-                android:id="@+id/timeSpinner"
-                android:spinnerMode="dropdown"
-                android:entries="@array/array_unit_time"/>
-
-        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dosage_result_ml"
+            android:id="@+id/dosageResultMl"
+            android:textColor="@android:color/white"
+            android:layout_marginLeft="12dp" />
 
     </LinearLayout>
 
