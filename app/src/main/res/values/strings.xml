@@ -8,6 +8,7 @@
     <string name="label_days">Betriebstage in Tagen</string>
     <string name="label_dose">Dosierung in mg/h</string>
     <string name="label_number_hint">0</string>
+    <string name="label_pump_activity">Pumpeneinstellungen</string>
 
     <string-array name="array_unit_volume">
         <item>ml</item>
