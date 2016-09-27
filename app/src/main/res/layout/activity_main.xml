@@ -96,36 +96,48 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_md"
-        android:background="@color/colorPrimary">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/label_dosage"
-            android:id="@+id/dosageLabel"
-            android:textColor="@android:color/white" />
+            android:padding="@dimen/padding_md"
+            android:background="@color/colorPrimary"
+            android:layout_alignParentBottom="true">
 
-        <TextView
-            android:layout_height="wrap_content"
-            android:text="@string/dosage_result_mg"
-            android:id="@+id/dosageResultMg"
-            android:layout_width="wrap_content"
-            android:textColor="@android:color/white"
-            android:layout_marginLeft="12dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_dosage"
+                android:id="@+id/dosageLabel"
+                android:textColor="@android:color/white" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dosage_result_ml"
-            android:id="@+id/dosageResultMl"
-            android:textColor="@android:color/white"
-            android:layout_marginLeft="12dp" />
+            <TextView
+                android:layout_height="wrap_content"
+                android:text="@string/dosage_result_mg"
+                android:id="@+id/dosageResultMg"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="12dp" />
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dosage_result_ml"
+                android:id="@+id/dosageResultMl"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="12dp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </GridLayout>
 
 </LinearLayout>
