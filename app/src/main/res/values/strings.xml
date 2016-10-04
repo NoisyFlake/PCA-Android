@@ -16,6 +16,7 @@
     <string name="label_pump_activity">Pumpeneinstellungen</string>
 
     <string name="title_pharmacy">Apothekerinformation</string>
+    <string name="title_pump">Pumpeneinstellungen</string>
 
     <string-array name="array_volume_cartridge">
         <item>50</item>
