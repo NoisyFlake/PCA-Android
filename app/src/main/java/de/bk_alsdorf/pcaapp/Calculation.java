@@ -60,3 +60,4 @@ public class Calculation {
 
         return minimumRuntime;
     }
+}

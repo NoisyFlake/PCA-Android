@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.bk_alsdorf.pcaapp.views.OverviewFragment;
+import de.bk_alsdorf.pcaapp.views.ResultFragment;
 import de.bk_alsdorf.pcaapp.views.PharmacyFragment;
 import de.bk_alsdorf.pcaapp.views.PumpFragment;
 
@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new PharmacyFragment(), "Apotheker");
-        adapter.addFragment(new PumpFragment(), "Pumpe");
-        adapter.addFragment(new OverviewFragment(), "Ergebnis");
+        adapter.addFragment(new PharmacyFragment(), "Berechnung Apotheker");
+        adapter.addFragment(new PumpFragment(), "Berechnung Pumpe");
+        adapter.addFragment(new ResultFragment(), "Ergebnis");
         viewPager.setAdapter(adapter);
     }
 

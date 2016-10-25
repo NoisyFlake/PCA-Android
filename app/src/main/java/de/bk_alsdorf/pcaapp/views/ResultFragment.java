@@ -12,9 +12,9 @@ import de.bk_alsdorf.pcaapp.R;
  * Created by Anja Möller on 04.10.2016.
  */
 
-public class OverviewFragment extends Fragment {
+public class ResultFragment extends Fragment {
 
-    public OverviewFragment() {
+    public ResultFragment() {
 
     }
 
@@ -27,6 +27,6 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_overview, container, false);
+        return inflater.inflate(R.layout.activity_result, container, false);
     }
 }
