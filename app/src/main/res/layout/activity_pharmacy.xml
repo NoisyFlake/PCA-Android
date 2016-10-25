@@ -3,146 +3,148 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:screenOrientation="portrait"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
-
-    <TextView
-        android:id="@+id/pharmacyTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/padding_l"
-        android:text="@string/title_pharmacy"
-        android:textSize="@dimen/font_size_l" />
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:screenOrientation="portrait">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/padding_md">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/basalRateLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_basal_rate" />
-
-        <EditText
-            android:id="@+id/basalRateInput"
+            android:id="@+id/pharmacyTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/label_number_hint"
-            android:inputType="number" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/padding_md">
-
-        <TextView
-            android:id="@+id/cartridgeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_cartridge" />
-
-        <Spinner
-            android:id="@+id/cartridgeSpinner"
-            android:layout_width="fill_parent"
-            android:layout_height="40dp"
-            android:entries="@array/array_volume_cartridge" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/padding_md">
-
-        <TextView
-            android:id="@+id/daysLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_duration" />
-
-        <SeekBar
-            android:id="@+id/durationSeekBar"
-            style="@style/Widget.AppCompat.SeekBar.Discrete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="14"
-            android:progress="10" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="10" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/padding_md">
-
-        <TextView
-            android:id="@+id/indrigendQuantityLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_indrigend_quantity" />
-
-        <EditText
-            android:id="@+id/indrigendQuantityInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/label_number_hint"
-            android:inputType="number" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:layout_marginBottom="@dimen/padding_l"
+            android:text="@string/title_pharmacy"
+            android:textSize="@dimen/font_size_l" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimary"
-            android:orientation="horizontal"
-            android:padding="@dimen/padding_md">
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/padding_md">
 
             <TextView
-                android:id="@+id/dosageLabel"
+                android:id="@+id/basalRateLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_dosage"
-                android:textColor="@android:color/white" />
+                android:text="@string/label_basal_rate" />
 
-            <TextView
-                android:id="@+id/dosageResult"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/basalRateInput"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding_md"
-                android:text="0"
-                android:textColor="@android:color/white" />
-
-            <TextView
-                android:id="@+id/dosageResultUnit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/padding_sm"
-                android:text="@string/dosage_result_mg_ml"
-                android:textColor="@android:color/white" />
+                android:ems="10"
+                android:hint="@string/label_number_hint"
+                android:inputType="number" />
 
         </LinearLayout>
-    </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/padding_md">
+
+            <TextView
+                android:id="@+id/cartridgeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_cartridge" />
+
+            <Spinner
+                android:id="@+id/cartridgeSpinner"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:entries="@array/array_volume_cartridge" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/padding_md">
+
+            <TextView
+                android:id="@+id/daysLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_duration" />
+
+            <SeekBar
+                android:id="@+id/durationSeekBar"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="14"
+                android:progress="10" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="10" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/padding_md">
+
+            <TextView
+                android:id="@+id/indrigendQuantityLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_indrigend_quantity" />
+
+            <EditText
+                android:id="@+id/indrigendQuantityInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/label_number_hint"
+                android:inputType="number" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--Footer for dosage information-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_md">
+
+        <TextView
+            android:id="@+id/dosageLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_dosage"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/dosageResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_md"
+            android:text="0"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/dosageResultUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_sm"
+            android:text="@string/dosage_result_mg_ml"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
 </LinearLayout>
