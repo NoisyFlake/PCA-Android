@@ -15,23 +15,8 @@ public class Calculation {
     // Calculated
     private BigDecimal agentAmountPerTank, concentration, basalRate, minimumRuntime = new BigDecimal(0);
 
-    public Calculation(BigDecimal agentPerHour, int tankVolume, int runtime, BigDecimal agentAmount, BigDecimal bolusAmount, int bolusLock, int bolusPerHour) {
-        // Pharmacy
-        this.agentPerHour = agentPerHour;
-        this.tankVolume = tankVolume;
-        this.runtime = runtime;
-        this.agentAmount = agentAmount;
-
-        // Pump
-        this.bolusAmount = bolusAmount;
-        this.bolusLock = bolusLock;
-        this.bolusPerHour = bolusPerHour;
-    }
-
-    public BigDecimal getAgentAmountPerTank() {
-        if (agentAmountPerTank.compareTo(BigDecimal.ZERO) == 0) {
-            agentAmountPerTank = agentPerHour.multiply(new BigDecimal(24)).multiply(new BigDecimal(runtime));
-        }
+    public static BigDecimal getAgentAmountPerTank(BigDecimal agentPerHour, int runtime) {
+        BigDecimal agentAmountPerTank = agentPerHour.multiply(new BigDecimal(24)).multiply(new BigDecimal(runtime));
         return agentAmountPerTank;
     }
 
