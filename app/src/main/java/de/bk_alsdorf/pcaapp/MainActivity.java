@@ -99,11 +99,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         cartridgeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
+            @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 updateDosageResult();
             }
 
+            @Override
             public void onNothingSelected(AdapterView<?> arg0) { }
         });
     }
