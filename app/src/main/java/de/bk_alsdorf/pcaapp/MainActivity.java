@@ -10,8 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar durationSeekBar;
     private TextView durationSeekBarCurrentValue;
     private EditText indrigendQuantityInput;
+    private TextView dosageResult;
 
 
     @Override
@@ -65,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         durationSeekBar = (SeekBar) findViewById(R.id.durationSeekBar);
         durationSeekBarCurrentValue = (TextView) findViewById(R.id.durationSeekBarCurrentValue);
         indrigendQuantityInput = (EditText)findViewById(R.id.indrigendQuantityInput);
+        dosageResult = (TextView) findViewById(R.id.dosageResult);
 
         basalRateInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 updateAgentAmountPerTank();
             }
         });
+
         durationSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
@@ -90,6 +96,15 @@ public class MainActivity extends AppCompatActivity {
                 updateAgentAmountPerTank();
                 durationSeekBarCurrentValue.setText(String.valueOf(durationSeekBar.getProgress()));
             }
+        });
+
+        cartridgeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateDosageResult();
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) { }
         });
     }
 
@@ -110,6 +125,21 @@ public class MainActivity extends AppCompatActivity {
         int runtime = durationSeekBar.getProgress();
 
         indrigendQuantityInput.setText(Calculation.getAgentAmountPerTank(agentPerHour, runtime).toString());
+        updateDosageResult();
+    }
+
+    private void updateDosageResult() {
+        BigDecimal agentAmountPerTank = new BigDecimal(0);
+        int tankVolume = 0;
+
+        if (indrigendQuantityInput.getText().toString().length() > 0) {
+            agentAmountPerTank = new BigDecimal(indrigendQuantityInput.getText().toString());
+        }
+        if (cartridgeSpinner.getSelectedItem().toString().length() > 0) {
+            tankVolume = Integer.parseInt(cartridgeSpinner.getSelectedItem().toString());
+        }
+
+        dosageResult.setText(Calculation.getConcentration(agentAmountPerTank, tankVolume).toString());
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

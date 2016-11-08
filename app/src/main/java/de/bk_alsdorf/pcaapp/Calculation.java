@@ -27,12 +27,9 @@ public class Calculation {
         return basalRate;
     }
 
-    public BigDecimal getConcentration() {
-        if (concentration.compareTo(BigDecimal.ZERO) == 0) {
-            concentration = agentAmount.divide(new BigDecimal(tankVolume));
-        }
+    public static BigDecimal getConcentration(BigDecimal agentAmount, int tankVolume) {
+        return agentAmount.divide(new BigDecimal(tankVolume));
 
-        return concentration;
     }
 
     public BigDecimal getMinimumRuntime() {
