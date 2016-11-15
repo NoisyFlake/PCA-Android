@@ -1,6 +1,7 @@
 package de.bk_alsdorf.pcaapp;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Created by Administrator on 25.10.2016.
@@ -16,30 +17,21 @@ public class Calculation {
     private BigDecimal agentAmountPerTank, concentration, basalRate, minimumRuntime = new BigDecimal(0);
 
     public static BigDecimal getAgentAmountPerTank(BigDecimal agentPerHour, int runtime) {
-        BigDecimal agentAmountPerTank = agentPerHour.multiply(new BigDecimal(24)).multiply(new BigDecimal(runtime));
-        return agentAmountPerTank;
+        return agentPerHour.multiply(new BigDecimal(24)).multiply(new BigDecimal(runtime));
     }
 
-    public BigDecimal getBasalRate() {
-        if (basalRate.compareTo(BigDecimal.ZERO) == 0) {
-            basalRate = agentPerHour.multiply(concentration);
-        }
-        return basalRate;
+    public static BigDecimal getBasalRate(BigDecimal agentPerHour, BigDecimal concentration) {
+        return agentPerHour.multiply(concentration);
     }
 
     public static BigDecimal getConcentration(BigDecimal agentAmount, int tankVolume) {
         return agentAmount.divide(new BigDecimal(tankVolume));
-
     }
 
-    public BigDecimal getMinimumRuntime() {
-        if (minimumRuntime.compareTo(BigDecimal.ZERO) == 0) {
-            BigDecimal maxBoliAgentPerHour = bolusAmount.multiply(new BigDecimal(bolusPerHour));
-            BigDecimal maxAgentPerHour = basalRate.add(maxBoliAgentPerHour);
+    public static BigDecimal getMinimumRuntime(BigDecimal bolusAmount, int bolusPerHour, BigDecimal basalRate, int tankVolume) {
+        BigDecimal maxBoliAgentPerHour = bolusAmount.multiply(new BigDecimal(bolusPerHour));
+        BigDecimal maxAgentPerHour = basalRate.add(maxBoliAgentPerHour);
 
-            minimumRuntime = new BigDecimal(tankVolume).divide(maxAgentPerHour);
-        }
-
-        return minimumRuntime;
+        return new BigDecimal(tankVolume).divide(maxAgentPerHour, 2, RoundingMode.HALF_UP);
     }
 }
