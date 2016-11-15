@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
                 updateAgentAmountPerTank();
-                durationSeekBarCurrentValue.setText(String.valueOf(durationSeekBar.getProgress()));
+                durationSeekBarCurrentValue.setText(String.valueOf(durationSeekBar.getProgress() + 1));
             }
         });
 
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         if(basalRateInput.getText().toString().length() > 0) {
             agentPerHour = new BigDecimal(basalRateInput.getText().toString());
         }
-        int runtime = durationSeekBar.getProgress();
+        int runtime = durationSeekBar.getProgress() + 1;
 
         indrigendQuantityInput.setText(Calculation.getAgentAmountPerTank(agentPerHour, runtime).toString());
         updateDosageResult();

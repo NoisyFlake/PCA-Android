@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/label_number_hint"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
         </LinearLayout>
 
@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/label_number_hint"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
 
         </LinearLayout>
     </LinearLayout>
