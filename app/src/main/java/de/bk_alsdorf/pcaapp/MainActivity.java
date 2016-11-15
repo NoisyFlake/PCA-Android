@@ -8,18 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.SeekBar;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.Spinner;
-import android.widget.TextView;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,19 +20,12 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private EditText basalRateInput;
-    private Spinner cartridgeSpinner;
-    private SeekBar durationSeekBar;
-    private TextView durationSeekBarCurrentValue;
-    private EditText indrigendQuantityInput;
-    private TextView dosageResult;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTabLayout();
-        initializePharmacyView();
     }
 
     private void setTabLayout() {
@@ -61,86 +43,12 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void initializePharmacyView() {
-        setContentView(R.layout.activity_pharmacy);
-
-        basalRateInput = (EditText)findViewById(R.id.basalRateInput);
-        cartridgeSpinner = (Spinner)findViewById(R.id.cartridgeSpinner);
-        durationSeekBar = (SeekBar) findViewById(R.id.durationSeekBar);
-        durationSeekBarCurrentValue = (TextView) findViewById(R.id.durationSeekBarCurrentValue);
-        indrigendQuantityInput = (EditText)findViewById(R.id.indrigendQuantityInput);
-        dosageResult = (TextView) findViewById(R.id.dosageResult);
-
-        basalRateInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {}
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateAgentAmountPerTank();
-            }
-        });
-
-        durationSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
-                updateAgentAmountPerTank();
-                durationSeekBarCurrentValue.setText(String.valueOf(durationSeekBar.getProgress() + 1));
-            }
-        });
-
-        cartridgeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                updateDosageResult();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) { }
-        });
-    }
-
-
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new PharmacyFragment(), "Berechnung Apotheker");
         adapter.addFragment(new PumpFragment(), "Berechnung Pumpe");
         adapter.addFragment(new ResultFragment(), "Ergebnis");
         viewPager.setAdapter(adapter);
-    }
-
-    private void updateAgentAmountPerTank() {
-        BigDecimal agentPerHour = new BigDecimal(0);
-        if(basalRateInput.getText().toString().length() > 0) {
-            agentPerHour = new BigDecimal(basalRateInput.getText().toString());
-        }
-        int runtime = durationSeekBar.getProgress() + 1;
-
-        indrigendQuantityInput.setText(Calculation.getAgentAmountPerTank(agentPerHour, runtime).toString());
-        updateDosageResult();
-    }
-
-    private void updateDosageResult() {
-        BigDecimal agentAmountPerTank = new BigDecimal(0);
-        int tankVolume = 0;
-
-        if (indrigendQuantityInput.getText().toString().length() > 0) {
-            agentAmountPerTank = new BigDecimal(indrigendQuantityInput.getText().toString());
-        }
-        if (cartridgeSpinner.getSelectedItem().toString().length() > 0) {
-            tankVolume = Integer.parseInt(cartridgeSpinner.getSelectedItem().toString());
-        }
-
-        dosageResult.setText(Calculation.getConcentration(agentAmountPerTank, tankVolume).toString());
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
