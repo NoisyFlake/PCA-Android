@@ -7,10 +7,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import java.math.BigDecimal;
 
@@ -81,6 +83,16 @@ public class PharmacyFragment extends Fragment {
                 updateAgentAmountPerTank();
                 durationSeekBarCurrentValue.setText(String.valueOf(durationSeekBar.getProgress()+1));
             }
+        });
+
+        cartridgeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateDosageResult();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) { }
         });
 
         return pharmacyView;
