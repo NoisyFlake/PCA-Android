@@ -14,9 +14,11 @@ import de.bk_alsdorf.pcaapp.R;
 
 public class ResultFragment extends Fragment {
 
-    public ResultFragment() {
+    //Fragments to calculate with values from other fragments
+    private PharmacyFragment pharmacyFragment;
+    private PumpFragment pumpFragment;
 
-    }
+    public ResultFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,5 +30,13 @@ public class ResultFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.activity_result, container, false);
+    }
+
+    public void setPharmacyFragment(PharmacyFragment pharmacyFragment) {
+        this.pharmacyFragment = pharmacyFragment;
+    }
+
+    public void setPumpFragment(PumpFragment pumpFragment) {
+        this.pumpFragment = pumpFragment;
     }
 }

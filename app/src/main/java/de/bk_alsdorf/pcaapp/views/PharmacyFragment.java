@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,10 @@ public class PharmacyFragment extends Fragment {
     private TextView dosageResult;
     private boolean updateInProgress;
 
+    //Fragments to calculate with values from other fragments
+    private PumpFragment pumpFragment;
+    private ResultFragment resultFragment;
+
     public PharmacyFragment() {}
 
     @Override
@@ -45,6 +50,33 @@ public class PharmacyFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return initializePharmacyView(inflater, container);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser)
+            Log.d("Pharmacy", "Fragment is visible.");
+
+        else
+            Log.d("Pharmacy", "Fragment is not visible.");
+    }
+
+    public EditText getBasalRateInput() {
+        return basalRateInput;
+    }
+
+    public EditText getIndrigendQuantityInput() {
+        return indrigendQuantityInput;
+    }
+
+    public void setPumpFragment(PumpFragment pumpFragment) {
+        this.pumpFragment = pumpFragment;
+    }
+
+    public void setResultFragment (ResultFragment resultFragment) {
+        this.resultFragment = resultFragment;
     }
 
     private View initializePharmacyView(LayoutInflater inflater, ViewGroup container) {

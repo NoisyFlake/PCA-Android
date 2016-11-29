@@ -45,10 +45,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new PharmacyFragment(), "Berechnung Apotheker");
-        adapter.addFragment(new PumpFragment(), "Berechnung Pumpe");
-        adapter.addFragment(new ResultFragment(), "Ergebnis");
-        viewPager.setAdapter(adapter);
+        viewPager.setAdapter(generateFragmentsForApater(adapter));
+    }
+
+    private  ViewPagerAdapter generateFragmentsForApater(ViewPagerAdapter adapter) {
+        PharmacyFragment pharmacyFragment = new PharmacyFragment();
+        PumpFragment pumpFragment = new PumpFragment();
+        ResultFragment resultFragment = new ResultFragment();
+        pharmacyFragment.setPumpFragment(pumpFragment);
+        pharmacyFragment.setResultFragment(resultFragment);
+        pumpFragment.setPharmacyFragment(pharmacyFragment);
+        pumpFragment.setResultFragment(resultFragment);
+        resultFragment.setPharmacyFragment(pharmacyFragment);
+        resultFragment.setPumpFragment(pumpFragment);
+
+        adapter.addFragment(pharmacyFragment, "Berechnung Apotheker");
+        adapter.addFragment(pumpFragment, "Berechnung Pumpe");
+        adapter.addFragment(resultFragment, "Ergebnis");
+        return adapter;
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

@@ -26,9 +26,11 @@ public class PumpFragment extends Fragment {
     private Spinner cartridgeSpinner;
     private EditText indrigendQuantityInput;
 
-    public PumpFragment() {
+    //Fragments to calculate with values from other fragments
+    private PharmacyFragment pharmacyFragment;
+    private ResultFragment resultFragment;
 
-    }
+    public PumpFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,10 +41,18 @@ public class PumpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return initializePumpView(inflater, container);
+        return initializePharmacyView(inflater, container);
     }
 
-    private View initializePumpView(LayoutInflater inflater, ViewGroup container) {
+    public void setPharmacyFragment(PharmacyFragment pharmacyFragment) {
+        this.pharmacyFragment = pharmacyFragment;
+    }
+
+    public void setResultFragment(ResultFragment resultFragment) {
+        this.resultFragment = resultFragment;
+    }
+
+    private View initializePharmacyView(LayoutInflater inflater, ViewGroup container) {
         final View pumpView = inflater.inflate(R.layout.activity_pump, container, false);
         final View pharmacyView = inflater.inflate(R.layout.activity_pharmacy, null);
 
@@ -66,14 +76,14 @@ public class PumpFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //updateBolusAmountInput();
+                updateBolusAmountInput();
             }
         });
         return pumpView;
     }
 
     private void updateBolusAmountInput() {
-        String choosedScaleUnit = bolusSpinner.getSelectedItem().toString();
+        /**String choosedScaleUnit = bolusSpinner.getSelectedItem().toString();
         BigDecimal agentPerHour = new BigDecimal(Integer.parseInt(basalRateInput.getText().toString()));
         BigDecimal agentAmount = new BigDecimal(Integer.parseInt(indrigendQuantityInput.getText().toString()));
         int tankVolume = Integer.parseInt(cartridgeSpinner.getSelectedItem().toString());
@@ -82,6 +92,6 @@ public class PumpFragment extends Fragment {
         }
         if(choosedScaleUnit.equals("ml")) {
             bolusAmountInput.setText(Calculation.convertMgToMl(agentPerHour, agentAmount, tankVolume).toString());
-        }
+        }**/
     }
 }
