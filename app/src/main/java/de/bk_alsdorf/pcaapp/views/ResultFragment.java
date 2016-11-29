@@ -5,6 +5,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import de.bk_alsdorf.pcaapp.R;
 
@@ -18,6 +23,8 @@ public class ResultFragment extends Fragment {
     private PharmacyFragment pharmacyFragment;
     private PumpFragment pumpFragment;
 
+    private TextView resultDate;
+
     public ResultFragment() {}
 
     @Override
@@ -29,7 +36,7 @@ public class ResultFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_result, container, false);
+        return initializeResultView(inflater, container);
     }
 
     public void setPharmacyFragment(PharmacyFragment pharmacyFragment) {
@@ -38,5 +45,20 @@ public class ResultFragment extends Fragment {
 
     public void setPumpFragment(PumpFragment pumpFragment) {
         this.pumpFragment = pumpFragment;
+    }
+
+    private View initializeResultView(LayoutInflater inflater, ViewGroup container) {
+        final View resultView = inflater.inflate(R.layout.activity_result, container, false);
+        final View pumpView = inflater.inflate(R.layout.activity_pump, null);
+        final View pharmacyView = inflater.inflate(R.layout.activity_pharmacy, null);
+
+        resultDate = (TextView) resultView.findViewById(R.id.resultDate);
+
+        DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        String date = df.format(Calendar.getInstance().getTime());
+
+        resultDate.setText(date);
+
+        return resultView;
     }
 }

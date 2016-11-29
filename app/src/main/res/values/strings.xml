@@ -26,7 +26,7 @@
 
     <string name="title_pharmacy">Apothekerinformation</string>
     <string name="title_pump">Pumpeneinstellungen</string>
-    <string name="title_result">Schmerzmittelversorgungsberechnung vom</string>
+    <string name="title_result">Schmerzmittelversorgung</string>
 
     <string-array name="array_volume_cartridge">
         <item>50</item>
