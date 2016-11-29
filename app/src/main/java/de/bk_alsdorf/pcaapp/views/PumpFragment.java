@@ -83,15 +83,15 @@ public class PumpFragment extends Fragment {
     }
 
     private void updateBolusAmountInput() {
-        /**String choosedScaleUnit = bolusSpinner.getSelectedItem().toString();
-        BigDecimal agentPerHour = new BigDecimal(Integer.parseInt(basalRateInput.getText().toString()));
-        BigDecimal agentAmount = new BigDecimal(Integer.parseInt(indrigendQuantityInput.getText().toString()));
+        String choosedScaleUnit = bolusSpinner.getSelectedItem().toString();
+        BigDecimal agentPerHour = new BigDecimal(Double.parseDouble(pharmacyFragment.getBasalRateInput().getText().toString()));
+        BigDecimal agentAmount = new BigDecimal(Double.parseDouble(pharmacyFragment.getIndrigendQuantityInput().getText().toString()));
         int tankVolume = Integer.parseInt(cartridgeSpinner.getSelectedItem().toString());
         if(choosedScaleUnit.equals("mg")) {
             bolusAmountInput.setText(Calculation.convertMlToMg(agentPerHour, agentAmount, tankVolume).toString());
         }
         if(choosedScaleUnit.equals("ml")) {
             bolusAmountInput.setText(Calculation.convertMgToMl(agentPerHour, agentAmount, tankVolume).toString());
-        }**/
+        }
     }
 }
