@@ -48,7 +48,7 @@
                     android:inputType="number" />
 
                 <Spinner
-                    android:id="@+id/spinner"
+                    android:id="@+id/bolusSpinner"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:entries="@array/array_unit_volume"
