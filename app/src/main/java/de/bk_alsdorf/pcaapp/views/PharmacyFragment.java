@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import de.bk_alsdorf.pcaapp.Calculation;
 import de.bk_alsdorf.pcaapp.R;
@@ -30,6 +31,7 @@ public class PharmacyFragment extends Fragment {
     private TextView durationSeekBarCurrentValue;
     private EditText indrigendQuantityInput;
     private TextView dosageResult;
+    private boolean updateInProgress;
 
     public PharmacyFragment() {}
 
@@ -66,9 +68,12 @@ public class PharmacyFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateAgentAmountPerTank();
+                if (!updateInProgress) {
+                    updateAgentAmountPerTank();
+                }
             }
         });
+
         durationSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -85,6 +90,7 @@ public class PharmacyFragment extends Fragment {
             }
         });
 
+
         cartridgeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -95,10 +101,31 @@ public class PharmacyFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> arg0) { }
         });
 
+
+        indrigendQuantityInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!updateInProgress) {
+                    updateAgentPerHour();
+                }
+            }
+        });
+
         return pharmacyView;
     }
 
     private void updateAgentAmountPerTank() {
+
+        updateInProgress = true;
+
         BigDecimal agentPerHour = new BigDecimal(0);
         if(basalRateInput.getText().toString().length() > 0) {
             agentPerHour = new BigDecimal(basalRateInput.getText().toString());
@@ -107,6 +134,7 @@ public class PharmacyFragment extends Fragment {
 
         indrigendQuantityInput.setText(Calculation.getAgentAmountPerTank(agentPerHour, runtime).toString());
         updateDosageResult();
+        updateInProgress = false;
     }
 
     private void updateDosageResult() {
@@ -121,5 +149,21 @@ public class PharmacyFragment extends Fragment {
         }
 
         dosageResult.setText(Calculation.getConcentration(agentAmountPerTank, tankVolume).toString());
+    }
+
+    private void updateAgentPerHour() {
+
+        updateInProgress = true;
+        BigDecimal agentAmountPerTank = new BigDecimal(0);
+        BigDecimal agentPerHour;
+
+        if(indrigendQuantityInput.getText().toString().length() > 0) {
+            agentAmountPerTank = new BigDecimal(indrigendQuantityInput.getText().toString());
+        }
+        int runtime = durationSeekBar.getProgress() + 1;
+
+        basalRateInput.setText(Calculation.getAgentPerHour(agentAmountPerTank,runtime).toString());
+
+        updateInProgress = false;
     }
 }

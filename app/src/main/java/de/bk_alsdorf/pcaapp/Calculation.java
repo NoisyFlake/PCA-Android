@@ -43,4 +43,18 @@ public class Calculation {
         BigDecimal concentration = getConcentration(agentAmount, tankVolume);
         return getBasalRate(agentPerHour, concentration);
     }
+
+    // Basalrate in mg/h = Wirkstoffmenge / 24 / laufzeit
+    public static BigDecimal getAgentPerHour(BigDecimal agentAmountPerTank, int runtime){
+
+        BigDecimal running = new BigDecimal(runtime);
+        BigDecimal daytime = new BigDecimal(24);
+        BigDecimal divideHelp;
+
+        divideHelp = agentAmountPerTank.divide(daytime,5, RoundingMode.HALF_UP);
+        divideHelp = divideHelp.divide(running,1, RoundingMode.HALF_UP);
+
+        return divideHelp;
+    };
+
 }
