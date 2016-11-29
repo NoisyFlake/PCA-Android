@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:max="14"
-                android:progress="10" />
+                android:progress="9" />
 
             <TextView
                 android:id="@+id/durationSeekBarCurrentValue"
