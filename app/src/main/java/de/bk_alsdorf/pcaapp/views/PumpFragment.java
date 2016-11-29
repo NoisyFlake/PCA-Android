@@ -39,10 +39,10 @@ public class PumpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return initializePharmacyView(inflater, container);
+        return initializePumpView(inflater, container);
     }
 
-    private View initializePharmacyView(LayoutInflater inflater, ViewGroup container) {
+    private View initializePumpView(LayoutInflater inflater, ViewGroup container) {
         final View pumpView = inflater.inflate(R.layout.activity_pump, container, false);
         final View pharmacyView = inflater.inflate(R.layout.activity_pharmacy, null);
 
@@ -66,7 +66,7 @@ public class PumpFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                updateBolusAmountInput();
+                //updateBolusAmountInput();
             }
         });
         return pumpView;
