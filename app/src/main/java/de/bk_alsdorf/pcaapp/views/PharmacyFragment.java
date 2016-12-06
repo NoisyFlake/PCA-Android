@@ -75,6 +75,10 @@ public class PharmacyFragment extends Fragment {
         return cartridgeSpinner;
     }
 
+    public SeekBar getDurationSeekBar() {
+        return durationSeekBar;
+    }
+
     public void setPumpFragment(PumpFragment pumpFragment) {
         this.pumpFragment = pumpFragment;
     }
@@ -149,8 +153,9 @@ public class PharmacyFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!updateInProgress) {
+                if (!updateInProgress && indrigendQuantityInput.getText().toString().length() > 0) {
                     updateAgentPerHour();
+                    updateDosageResult();
                 }
             }
         });
@@ -191,7 +196,6 @@ public class PharmacyFragment extends Fragment {
 
         updateInProgress = true;
         BigDecimal agentAmountPerTank = new BigDecimal(0);
-        BigDecimal agentPerHour;
 
         if(indrigendQuantityInput.getText().toString().length() > 0) {
             agentAmountPerTank = new BigDecimal(indrigendQuantityInput.getText().toString());
