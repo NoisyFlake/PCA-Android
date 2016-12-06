@@ -71,6 +71,10 @@ public class PharmacyFragment extends Fragment {
         return indrigendQuantityInput;
     }
 
+    public Spinner getCartridgeSpinner() {
+        return cartridgeSpinner;
+    }
+
     public void setPumpFragment(PumpFragment pumpFragment) {
         this.pumpFragment = pumpFragment;
     }
