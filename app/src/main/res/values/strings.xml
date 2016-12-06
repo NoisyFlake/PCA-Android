@@ -34,8 +34,8 @@
         <item>250</item>
     </string-array>
     <string-array name="array_unit_volume">
-        <item>ml</item>
         <item>mg</item>
+        <item>ml</item>
     </string-array>
     <string-array name="array_unit_time">
         <item>Minuten</item>

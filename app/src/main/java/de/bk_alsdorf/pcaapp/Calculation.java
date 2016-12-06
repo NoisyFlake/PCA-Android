@@ -33,18 +33,24 @@ public class Calculation {
     //Bolusmenge in ml = Basalrate * (1/Wirkstoffkonzentration)
     public static BigDecimal convertBolusAmountMgToMl(BigDecimal agentPerHour, BigDecimal agentAmount, int tankVolume) {
         BigDecimal concentration = getConcentration(agentAmount, tankVolume);
-        BigDecimal basalrate = getBasalRate(agentPerHour, concentration);
         BigDecimal one = new BigDecimal(1.0);
         if(concentration.compareTo(BigDecimal.valueOf(0.0)) == 0) {
-            return basalrate.multiply((one.divide(new BigDecimal(1.0), RoundingMode.HALF_UP)));
+            return agentPerHour.multiply((one.divide(new BigDecimal(1.0), RoundingMode.HALF_UP)));
         }
-        return basalrate.multiply((one.divide(concentration,1, RoundingMode.HALF_UP)));
+        return agentPerHour.multiply(one.divide(concentration,3,RoundingMode.HALF_UP));
     }
 
-    // Bolusmenge in mg = Basalrate
-    public static BigDecimal convertBolusAmountMlToMg(BigDecimal agentPerHour, BigDecimal agentAmount, int tankVolume) {
-        BigDecimal concentration = getConcentration(agentAmount, tankVolume);
-        return getBasalRate(agentPerHour, concentration);
+    // Basalrate = Bolusmenge in ml / (1/Wirkstoffkonzentration)
+    public static BigDecimal convertBasalrateFromBolusAmountMl(BigDecimal bolusAmount, int tankVolume) {
+        BigDecimal concentration = getConcentration(bolusAmount, tankVolume);
+        BigDecimal one = new BigDecimal(1.0);
+        if(concentration.compareTo(BigDecimal.valueOf(0.0)) == 0) {
+            concentration = one.divide(one, 1, RoundingMode.HALF_UP);
+            return bolusAmount.divide(concentration);
+        } else {
+            concentration = one.divide(concentration, 1, RoundingMode.HALF_UP);
+            return bolusAmount.divide(concentration);
+        }
     }
 
     // Basalrate in mg/h = Wirkstoffmenge / 24 / laufzeit

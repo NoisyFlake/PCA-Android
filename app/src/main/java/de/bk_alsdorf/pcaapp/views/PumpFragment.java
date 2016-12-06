@@ -114,7 +114,7 @@ public class PumpFragment extends Fragment {
             agentAmount = new BigDecimal(Double.parseDouble(pharmacyFragment.getIndrigendQuantityInput().getText().toString()));
         }
         if(choosedScaleUnit.equals("mg")) {
-            bolusAmountInput.setText(Calculation.convertBolusAmountMlToMg(agentPerHour, agentAmount, tankVolume).toString());
+            bolusAmountInput.setText(pharmacyFragment.getBasalRateInput().getText().toString());
         }
         if(choosedScaleUnit.equals("ml")) {
             bolusAmountInput.setText(Calculation.convertBolusAmountMgToMl(agentPerHour, agentAmount, tankVolume).toString());
@@ -127,13 +127,16 @@ public class PumpFragment extends Fragment {
     private void updatePharmacyInputsByBolusAmountInput() {
         updateInProgress = true;
         String choosedScaleUnit = bolusSpinner.getSelectedItem().toString();
+        String bolusAmount = bolusAmountInput.getText().toString();
+        int tankVolume = Integer.parseInt(pharmacyFragment.getCartridgeSpinner().getSelectedItem().toString());
+        if(bolusAmount.length()<1) {
+            bolusAmount = "0";
+        }
         if(choosedScaleUnit.equals("mg")) {
-            pharmacyFragment.getBasalRateInput().setText("");
-            pharmacyFragment.getIndrigendQuantityInput().setText("");
+            pharmacyFragment.getIndrigendQuantityInput().setText(bolusAmount);
         }
         if(choosedScaleUnit.equals("ml")) {
-            pharmacyFragment.getBasalRateInput().setText("");
-            pharmacyFragment.getIndrigendQuantityInput().setText("");
+            pharmacyFragment.getBasalRateInput().setText(Calculation.convertBasalrateFromBolusAmountMl(new BigDecimal(bolusAmount), tankVolume).toString());
         }
 
         updateInProgress = false;
