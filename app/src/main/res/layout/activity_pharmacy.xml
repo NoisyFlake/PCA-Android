@@ -101,13 +101,13 @@
             android:paddingBottom="@dimen/padding_md">
 
             <TextView
-                android:id="@+id/indrigendQuantityLabel"
+                android:id="@+id/ingredientQuantityLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_indrigend_quantity" />
+                android:text="@string/label_ingredient_quantity" />
 
             <EditText
-                android:id="@+id/indrigendQuantityInput"
+                android:id="@+id/ingredientQuantityInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"

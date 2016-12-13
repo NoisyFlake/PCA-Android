@@ -11,19 +11,20 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import de.bk_alsdorf.pcaapp.Data;
 import de.bk_alsdorf.pcaapp.R;
-
-/**
- * Created by Anja Möller on 04.10.2016.
- */
 
 public class ResultFragment extends Fragment {
 
-    //Fragments to calculate with values from other fragments
-    private PharmacyFragment pharmacyFragment;
-    private PumpFragment pumpFragment;
-
     private TextView resultDate;
+    private TextView basalRateResult;
+    private TextView cartridgeResult;
+    private TextView durationResult;
+    private TextView ingredientQuantityResult;
+    private TextView dosageResult;
+    private TextView bolusAmountResult;
+    private TextView bolusLockResult;
+    private TextView boliPerHourResult;
 
     public ResultFragment() {}
 
@@ -33,26 +34,58 @@ public class ResultFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return initializeResultView(inflater, container);
     }
 
-    public void setPharmacyFragment(PharmacyFragment pharmacyFragment) {
-        this.pharmacyFragment = pharmacyFragment;
+    @Override
+    public void setUserVisibleHint (boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) updateResults();
     }
 
-    public void setPumpFragment(PumpFragment pumpFragment) {
-        this.pumpFragment = pumpFragment;
+    public void updateResults() {
+        String basalRate = Data.getBasalRate() + " mg/h";
+        basalRateResult.setText(basalRate);
+
+        if (Data.getIngredientQuantity().length() > 0 && !Data.getIngredientQuantity().equals("0.0")) {
+            String ingredientQuantity = Data.getIngredientQuantity() + " mg";
+            ingredientQuantityResult.setText(ingredientQuantity);
+        }
+
+        String cartridge = Data.getCartridge() + " ml";
+        cartridgeResult.setText(cartridge);
+
+        String duration = Data.getDuration() + " Tage";
+        durationResult.setText(duration);
+
+        dosageResult.setText(Data.getDosage());
+
+        if (Data.getBolusAmount().length() > 0 && !Data.getBolusAmount().equals("0.0")) {
+            bolusAmountResult.setText(Data.getBolusAmount());
+        }
+
+        if (Data.getBolusLock().length() > 0 && !Data.getBolusLock().equals("0.0")) {
+            bolusLockResult.setText(Data.getBolusLock());
+        }
+
+        if (Data.getBoliPerHour().length() > 0 && !Data.getBoliPerHour().equals("0.0")) {
+            boliPerHourResult.setText(Data.getBoliPerHour());
+        }
     }
 
     private View initializeResultView(LayoutInflater inflater, ViewGroup container) {
         final View resultView = inflater.inflate(R.layout.activity_result, container, false);
-        final View pumpView = inflater.inflate(R.layout.activity_pump, null);
-        final View pharmacyView = inflater.inflate(R.layout.activity_pharmacy, null);
 
         resultDate = (TextView) resultView.findViewById(R.id.resultDate);
+        basalRateResult = (TextView) resultView.findViewById(R.id.basalRateResult);
+        cartridgeResult = (TextView) resultView.findViewById(R.id.cartridgeResult);
+        durationResult = (TextView) resultView.findViewById(R.id.durationResult);
+        ingredientQuantityResult = (TextView) resultView.findViewById(R.id.ingredientQuantityResult);
+        dosageResult = (TextView) resultView.findViewById(R.id.dosageResult);
+        bolusAmountResult = (TextView) resultView.findViewById(R.id.bolusAmountResult);
+        bolusLockResult = (TextView) resultView.findViewById(R.id.bolusLockResult);
+        boliPerHourResult = (TextView) resultView.findViewById(R.id.boliPerHourResult);
 
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         String date = df.format(Calendar.getInstance().getTime());

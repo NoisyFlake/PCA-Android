@@ -14,20 +14,15 @@ import android.widget.Spinner;
 import java.math.BigDecimal;
 
 import de.bk_alsdorf.pcaapp.Calculation;
+import de.bk_alsdorf.pcaapp.Data;
 import de.bk_alsdorf.pcaapp.R;
-
-/**
- * Created by Anja Möller on 04.10.2016.
- */
 
 public class PumpFragment extends Fragment {
     private EditText bolusAmountInput;
     private Spinner bolusSpinner;
+    private EditText bolusLockInput;
     private boolean updateInProgress;
-
-    //Fragments to calculate with values from other fragments
-    private PharmacyFragment pharmacyFragment;
-    private ResultFragment resultFragment;
+    private EditText boliPerHourInput;
 
     public PumpFragment() {}
 
@@ -37,18 +32,8 @@ public class PumpFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return initializePumpView(inflater, container);
-    }
-
-    public void setPharmacyFragment(PharmacyFragment pharmacyFragment) {
-        this.pharmacyFragment = pharmacyFragment;
-    }
-
-    public void setResultFragment(ResultFragment resultFragment) {
-        this.resultFragment = resultFragment;
     }
 
     @Override
@@ -57,7 +42,7 @@ public class PumpFragment extends Fragment {
 
         if (isVisibleToUser) {
             if(!updateInProgress) {
-                updateBolusAmountInputByPharmacyFragment();
+                updatePharmacyInputsByBolusAmountInput();
             }
         }
     }
@@ -65,78 +50,69 @@ public class PumpFragment extends Fragment {
     private View initializePumpView(LayoutInflater inflater, ViewGroup container) {
         final View pumpView = inflater.inflate(R.layout.activity_pump, container, false);
 
-        //Pump Viewelements
         bolusAmountInput = (EditText) pumpView.findViewById(R.id.bolusAmountInput);
         bolusSpinner = (Spinner) pumpView.findViewById(R.id.bolusSpinner);
+        bolusLockInput = (EditText) pumpView.findViewById(R.id.bolusLockInput);
+        boliPerHourInput = (EditText) pumpView.findViewById(R.id.boliPerHourInput);
+
 
         bolusAmountInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!updateInProgress) {
-                    updatePharmacyInputsByBolusAmountInput();
-                }
+                Data.setBolusAmount(bolusAmountInput.getText().toString());
             }
         });
 
         bolusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                updateBolusAmountInputByPharmacyFragment();
-            }
+            public void onNothingSelected(AdapterView<?> arg0) { }
 
             @Override
-            public void onNothingSelected(AdapterView<?> arg0) { }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Data.setBolusUnit(bolusSpinner.getSelectedItem().toString());
+                updatePharmacyInputsByBolusAmountInput();
+            }
+        });
+
+        bolusLockInput.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Data.setBolusLock(bolusLockInput.getText().toString());
+            }
+        });
+
+        boliPerHourInput.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Data.setBoliPerHour(boliPerHourInput.getText().toString());
+            }
         });
 
         return pumpView;
     }
 
-    //Update bolus amount if view change to pump View or mg/ml dropdown is changed
-    private void updateBolusAmountInputByPharmacyFragment() {
-        updateInProgress = true;
-
-        String choosedScaleUnit = bolusSpinner.getSelectedItem().toString();
-        BigDecimal agentPerHour = new BigDecimal(0);
-        BigDecimal agentAmount = new BigDecimal(0);
-        int tankVolume = Integer.parseInt(pharmacyFragment.getCartridgeSpinner().getSelectedItem().toString());
-        if(pharmacyFragment.getBasalRateInput().getText().toString().length() > 0) {
-            agentPerHour = new BigDecimal(Double.parseDouble(pharmacyFragment.getBasalRateInput().getText().toString()));
-        }
-        if(pharmacyFragment.getIndrigendQuantityInput().getText().toString().length() > 0) {
-            agentAmount = new BigDecimal(Double.parseDouble(pharmacyFragment.getIndrigendQuantityInput().getText().toString()));
-        }
-        if(choosedScaleUnit.equals("mg")) {
-            bolusAmountInput.setText(pharmacyFragment.getBasalRateInput().getText().toString());
-        }
-        if(choosedScaleUnit.equals("ml")) {
-            bolusAmountInput.setText(Calculation.convertBolusAmountMgToMl(agentPerHour, agentAmount, tankVolume).toString());
-        }
-
-        updateInProgress = false;
-    }
-
     //Update agentPerHour and agentAmount in pharmacy view if bolus amount input is changed
     private void updatePharmacyInputsByBolusAmountInput() {
         updateInProgress = true;
-        String choosedScaleUnit = bolusSpinner.getSelectedItem().toString();
-        String bolusAmount = bolusAmountInput.getText().toString();
-        int tankVolume = Integer.parseInt(pharmacyFragment.getCartridgeSpinner().getSelectedItem().toString());
+        String choosedScaleUnit = Data.getBolusUnit();
+        String bolusAmount = Data.getBolusAmount();
+        int tankVolume = Integer.parseInt(Data.getCartridge());
         if(bolusAmount.length()<1) {
             bolusAmount = "0";
         }
         if(choosedScaleUnit.equals("mg")) {
-            pharmacyFragment.getIndrigendQuantityInput().setText(bolusAmount);
+            Data.setIngredientQuantity(bolusAmount);
         }
         if(choosedScaleUnit.equals("ml")) {
-            pharmacyFragment.getBasalRateInput().setText(Calculation.convertBasalrateFromBolusAmountMl(new BigDecimal(bolusAmount), tankVolume).toString());
+            Data.setBasalRate(Calculation.convertBasalrateFromBolusAmountMl(new BigDecimal(bolusAmount), tankVolume).toString());
         }
 
         updateInProgress = false;

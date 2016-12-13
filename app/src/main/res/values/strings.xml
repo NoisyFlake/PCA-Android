@@ -10,7 +10,7 @@
     <string name="label_cartridge">Kassettenvolumen in ml</string>
     <string name="label_dosage">Wirkstoffkonzentration</string>
     <string name="label_duration">Laufzeit in Tagen</string>
-    <string name="label_indrigend_quantity">Wirkstoffmenge in mg / Beladung</string>
+    <string name="label_ingredient_quantity">Wirkstoffmenge in mg / Beladung</string>
     <string name="label_number_hint">0</string>
     <string name="label_pump_activity">Pumpeneinstellungen</string>
 
@@ -22,7 +22,7 @@
     <string name="result_cartridge">Kassettenvolumen:</string>
     <string name="result_dosage">Wirkstoffkonzentration:</string>
     <string name="result_duration">Laufzeit:</string>
-    <string name="result_indrigend_quantity">Wirkstoffmenge:</string>
+    <string name="result_ingredient_quantity">Wirkstoffmenge:</string>
 
     <string name="title_pharmacy">Apothekerinformation</string>
     <string name="title_pump">Pumpeneinstellungen</string>

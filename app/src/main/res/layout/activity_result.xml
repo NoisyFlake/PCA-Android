@@ -108,14 +108,14 @@
             android:paddingBottom="@dimen/padding_l">
 
             <TextView
-                android:id="@+id/indrigendQuantityResultLabel"
+                android:id="@+id/ingredientQuantityResultLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/margin_md"
-                android:text="@string/result_indrigend_quantity" />
+                android:text="@string/result_ingredient_quantity" />
 
             <TextView
-                android:id="@+id/indrigendQuantityResult"
+                android:id="@+id/ingredientQuantityResult"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/result_not_given" />

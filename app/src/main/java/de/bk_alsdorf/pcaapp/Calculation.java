@@ -27,6 +27,7 @@ public class Calculation {
         BigDecimal maxBoliAgentPerHour = bolusAmount.multiply(new BigDecimal(bolusPerHour));
         BigDecimal maxAgentPerHour = basalRate.add(maxBoliAgentPerHour);
 
+        if (maxAgentPerHour.compareTo(new BigDecimal(0)) == 0) return new BigDecimal(0);
         return new BigDecimal(tankVolume).divide(maxAgentPerHour, 1, RoundingMode.HALF_UP);
     }
 

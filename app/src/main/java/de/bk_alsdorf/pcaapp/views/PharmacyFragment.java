@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,27 +15,19 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import de.bk_alsdorf.pcaapp.Calculation;
+import de.bk_alsdorf.pcaapp.Data;
 import de.bk_alsdorf.pcaapp.R;
-
-/**
- * Created by Anja Möller on 04.10.2016.
- */
 
 public class PharmacyFragment extends Fragment {
     private EditText basalRateInput;
     private Spinner cartridgeSpinner;
     private SeekBar durationSeekBar;
     private TextView durationSeekBarCurrentValue;
-    private EditText indrigendQuantityInput;
+    private EditText ingredientQuantityInput;
     private TextView dosageResult;
-    private boolean updateInProgress;
-
-    //Fragments to calculate with values from other fragments
-    private PumpFragment pumpFragment;
-    private ResultFragment resultFragment;
+    private boolean updateInProgress = false;
 
     public PharmacyFragment() {}
 
@@ -46,45 +37,8 @@ public class PharmacyFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return initializePharmacyView(inflater, container);
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if (isVisibleToUser)
-            Log.d("Pharmacy", "Fragment is visible.");
-
-        else
-            Log.d("Pharmacy", "Fragment is not visible.");
-    }
-
-    public EditText getBasalRateInput() {
-        return basalRateInput;
-    }
-
-    public EditText getIndrigendQuantityInput() {
-        return indrigendQuantityInput;
-    }
-
-    public Spinner getCartridgeSpinner() {
-        return cartridgeSpinner;
-    }
-
-    public SeekBar getDurationSeekBar() {
-        return durationSeekBar;
-    }
-
-    public void setPumpFragment(PumpFragment pumpFragment) {
-        this.pumpFragment = pumpFragment;
-    }
-
-    public void setResultFragment (ResultFragment resultFragment) {
-        this.resultFragment = resultFragment;
     }
 
     private View initializePharmacyView(LayoutInflater inflater, ViewGroup container) {
@@ -94,20 +48,16 @@ public class PharmacyFragment extends Fragment {
         cartridgeSpinner = (Spinner) pharmacyView.findViewById(R.id.cartridgeSpinner);
         durationSeekBar = (SeekBar) pharmacyView.findViewById(R.id.durationSeekBar);
         durationSeekBarCurrentValue = (TextView) pharmacyView.findViewById(R.id.durationSeekBarCurrentValue);
-        indrigendQuantityInput = (EditText) pharmacyView.findViewById(R.id.indrigendQuantityInput);
+        ingredientQuantityInput = (EditText) pharmacyView.findViewById(R.id.ingredientQuantityInput);
         dosageResult = (TextView) pharmacyView.findViewById(R.id.dosageResult);
 
         basalRateInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Data.setBasalRate(basalRateInput.getText().toString());
                 if (!updateInProgress) {
                     updateAgentAmountPerTank();
                 }
@@ -115,45 +65,38 @@ public class PharmacyFragment extends Fragment {
         });
 
         durationSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                updateAgentAmountPerTank();
+                Data.setDuration(String.valueOf(durationSeekBar.getProgress() + 1));
                 durationSeekBarCurrentValue.setText(String.valueOf(durationSeekBar.getProgress()+1));
+                updateAgentAmountPerTank();
+
             }
         });
 
 
         cartridgeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                updateDosageResult();
-            }
+            public void onNothingSelected(AdapterView<?> arg0) {}
 
             @Override
-            public void onNothingSelected(AdapterView<?> arg0) { }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Data.setCartridge(cartridgeSpinner.getSelectedItem().toString());
+                updateDosageResult();
+            }
         });
 
 
-        indrigendQuantityInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+        ingredientQuantityInput.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!updateInProgress && indrigendQuantityInput.getText().toString().length() > 0) {
+                Data.setIngredientQuantity(ingredientQuantityInput.getText().toString());
+                if (!updateInProgress) {
                     updateAgentPerHour();
                     updateDosageResult();
                 }
@@ -164,43 +107,29 @@ public class PharmacyFragment extends Fragment {
     }
 
     private void updateAgentAmountPerTank() {
-
         updateInProgress = true;
 
-        BigDecimal agentPerHour = new BigDecimal(0);
-        if(basalRateInput.getText().toString().length() > 0) {
-            agentPerHour = new BigDecimal(basalRateInput.getText().toString());
-        }
-        int runtime = durationSeekBar.getProgress() + 1;
+        BigDecimal agentPerHour = new BigDecimal(Data.getBasalRate());
+        int runtime = Integer.parseInt(Data.getDuration());
 
-        indrigendQuantityInput.setText(Calculation.getAgentAmountPerTank(agentPerHour, runtime).toString());
+        ingredientQuantityInput.setText(Calculation.getAgentAmountPerTank(agentPerHour, runtime).toString());
         updateDosageResult();
         updateInProgress = false;
     }
 
     private void updateDosageResult() {
-        BigDecimal agentAmountPerTank = new BigDecimal(0);
-        int tankVolume = 0;
+        BigDecimal agentAmountPerTank = new BigDecimal(Data.getIngredientQuantity());
+        int tankVolume = Integer.parseInt(Data.getCartridge());
 
-        if (indrigendQuantityInput.getText().toString().length() > 0) {
-            agentAmountPerTank = new BigDecimal(indrigendQuantityInput.getText().toString());
-        }
-        if (cartridgeSpinner.getSelectedItem().toString().length() > 0) {
-            tankVolume = Integer.parseInt(cartridgeSpinner.getSelectedItem().toString());
-        }
-
-        dosageResult.setText(Calculation.getConcentration(agentAmountPerTank, tankVolume).toString());
+        Data.setDosage(Calculation.getConcentration(agentAmountPerTank, tankVolume).toString());
+        dosageResult.setText(Data.getDosage());
     }
 
     private void updateAgentPerHour() {
-
         updateInProgress = true;
-        BigDecimal agentAmountPerTank = new BigDecimal(0);
 
-        if(indrigendQuantityInput.getText().toString().length() > 0) {
-            agentAmountPerTank = new BigDecimal(indrigendQuantityInput.getText().toString());
-        }
-        int runtime = durationSeekBar.getProgress() + 1;
+        BigDecimal agentAmountPerTank = new BigDecimal(Data.getIngredientQuantity());
+        int runtime = Integer.parseInt(Data.getDuration());
 
         basalRateInput.setText(Calculation.getAgentPerHour(agentAmountPerTank,runtime).toString());
 
