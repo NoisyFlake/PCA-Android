@@ -41,6 +41,19 @@ public class PharmacyFragment extends Fragment {
         return initializePharmacyView(inflater, container);
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
+            if(!updateInProgress) {
+                if(basalRateInput != null){
+                    basalRateInput.setText(Data.getBasalRate());
+                }
+            }
+        }
+    }
+
     private View initializePharmacyView(LayoutInflater inflater, ViewGroup container) {
         final View pharmacyView = inflater.inflate(R.layout.activity_pharmacy, container, false);
 
@@ -60,6 +73,7 @@ public class PharmacyFragment extends Fragment {
                 Data.setBasalRate(basalRateInput.getText().toString());
                 if (!updateInProgress) {
                     updateAgentAmountPerTank();
+                    updatePumpViewBolusAmountInMg();
                 }
             }
         });
@@ -99,6 +113,7 @@ public class PharmacyFragment extends Fragment {
                 if (!updateInProgress) {
                     updateAgentPerHour();
                     updateDosageResult();
+                    updatePumpViewBolusAmountInMg();
                 }
             }
         });
@@ -134,5 +149,9 @@ public class PharmacyFragment extends Fragment {
         basalRateInput.setText(Calculation.getAgentPerHour(agentAmountPerTank,runtime).toString());
 
         updateInProgress = false;
+    }
+
+    private void updatePumpViewBolusAmountInMg() {
+        Data.setBolusAmount(Data.getBasalRate());
     }
 }
