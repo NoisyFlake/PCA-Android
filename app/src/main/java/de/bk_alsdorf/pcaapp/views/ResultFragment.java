@@ -81,7 +81,7 @@ public class ResultFragment extends Fragment {
         basalRateResult = (TextView) resultView.findViewById(R.id.basalRateResult);
         cartridgeResult = (TextView) resultView.findViewById(R.id.cartridgeResult);
         durationResult = (TextView) resultView.findViewById(R.id.durationResult);
-        ingredientQuantityResult = (TextView) resultView.findViewById(R.id.ingredientQuantityResult);
+        ingredientQuantityResult = (TextView) resultView.findViewById(R.id.indrigendQuantityResult);
         dosageResult = (TextView) resultView.findViewById(R.id.dosageResult);
         bolusAmountResult = (TextView) resultView.findViewById(R.id.bolusAmountResult);
         bolusLockResult = (TextView) resultView.findViewById(R.id.bolusLockResult);

@@ -31,6 +31,12 @@ public class Calculation {
         return new BigDecimal(tankVolume).divide(maxAgentPerHour, 1, RoundingMode.HALF_UP);
     }
 
+    // Bolusmenge in mg = Basalrate
+    public static BigDecimal convertBolusAmountMlToMg(BigDecimal agentPerHour, BigDecimal agentAmount, int tankVolume) {
+        BigDecimal concentration = getConcentration(agentAmount, tankVolume);
+        return getBasalRate(agentPerHour, concentration);
+    }
+
     //Bolusmenge in ml = Basalrate * (1/Wirkstoffkonzentration)
     public static BigDecimal convertBolusAmountMgToMl(BigDecimal agentPerHour, BigDecimal agentAmount, int tankVolume) {
         BigDecimal concentration = getConcentration(agentAmount, tankVolume);

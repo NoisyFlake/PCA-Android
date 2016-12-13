@@ -107,6 +107,29 @@ public class PumpFragment extends Fragment {
 
     }
 
+    //Update bolus amount if view change to pump View or mg/ml dropdown is changed
+    private void updateBolusAmountInputByPharmacyFragment() {
+        updateInProgress = true;
+
+        String choosedScaleUnit = bolusSpinner.getSelectedItem().toString();
+        BigDecimal agentPerHour = new BigDecimal(0);
+        BigDecimal agentAmount = new BigDecimal(0);
+        int tankVolume = Integer.parseInt(Data.getCartridge());
+        if(Double.parseDouble(Data.getBasalRate()) == 0) {
+            agentPerHour = new BigDecimal(Double.parseDouble(Data.getBasalRate()));
+        }
+        if(Double.parseDouble(Data.getIngredientQuantity()) == 0) {
+            agentAmount = new BigDecimal(Double.parseDouble(Data.getIngredientQuantity()));
+        }
+        if(choosedScaleUnit.equals("mg")) {
+            bolusAmountInput.setText(Calculation.convertBolusAmountMlToMg(agentPerHour, agentAmount, tankVolume).toString());
+        }
+        if(choosedScaleUnit.equals("ml")) {
+            bolusAmountInput.setText(Calculation.convertBolusAmountMgToMl(agentPerHour, agentAmount, tankVolume).toString());
+        }
+
+        updateInProgress = false;
+    }
 
     //Update agentPerHour and agentAmount in pharmacy view if bolus amount input is changed
     private void updatePharmacyInputsByBolusAmountInput(){
