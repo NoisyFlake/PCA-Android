@@ -24,7 +24,8 @@ public class PumpFragment extends Fragment {
     private boolean updateInProgress;
     private EditText boliPerHourInput;
 
-    public PumpFragment() {}
+    public PumpFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,8 +42,9 @@ public class PumpFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser) {
-            if(!updateInProgress) {
+            if (!updateInProgress) {
                 updatePharmacyInputsByBolusAmountInput();
+
             }
         }
     }
@@ -56,8 +58,11 @@ public class PumpFragment extends Fragment {
         bolusLockTimeInput = (EditText) pumpView.findViewById(R.id.bolusLockInput);
 
         bolusAmountInput.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {}
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -67,17 +72,20 @@ public class PumpFragment extends Fragment {
 
 
         bolusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onNothingSelected(AdapterView<?> arg0) { }
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Data.setBolusUnit(bolusSpinner.getSelectedItem().toString());
                 updatePharmacyInputsByBolusAmountInput();
             }
-         });
+        });
 
         boliPerHourInput.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
+
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
@@ -91,8 +99,11 @@ public class PumpFragment extends Fragment {
         });
 
         bolusLockTimeInput.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {}
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void afterTextChanged(Editable s) {
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -111,20 +122,20 @@ public class PumpFragment extends Fragment {
     private void updateBolusAmountInputByPharmacyFragment() {
         updateInProgress = true;
 
-        String choosedScaleUnit = bolusSpinner.getSelectedItem().toString();
+        String choosedScaleUnit = Data.getBolusUnit();
         BigDecimal agentPerHour = new BigDecimal(0);
         BigDecimal agentAmount = new BigDecimal(0);
         int tankVolume = Integer.parseInt(Data.getCartridge());
-        if(Double.parseDouble(Data.getBasalRate()) == 0) {
+        if (Double.parseDouble(Data.getBasalRate()) == 0) {
             agentPerHour = new BigDecimal(Double.parseDouble(Data.getBasalRate()));
         }
-        if(Double.parseDouble(Data.getIngredientQuantity()) == 0) {
+        if (Double.parseDouble(Data.getIngredientQuantity()) == 0) {
             agentAmount = new BigDecimal(Double.parseDouble(Data.getIngredientQuantity()));
         }
-        if(choosedScaleUnit.equals("mg")) {
+        if (choosedScaleUnit.equals("mg")) {
             bolusAmountInput.setText(Calculation.convertBolusAmountMlToMg(agentPerHour, agentAmount, tankVolume).toString());
         }
-        if(choosedScaleUnit.equals("ml")) {
+        if (choosedScaleUnit.equals("ml")) {
             bolusAmountInput.setText(Calculation.convertBolusAmountMgToMl(agentPerHour, agentAmount, tankVolume).toString());
         }
 
@@ -132,25 +143,25 @@ public class PumpFragment extends Fragment {
     }
 
     //Update agentPerHour and agentAmount in pharmacy view if bolus amount input is changed
-    private void updatePharmacyInputsByBolusAmountInput(){
+    private void updatePharmacyInputsByBolusAmountInput() {
         updateInProgress = true;
         String choosedScaleUnit = Data.getBolusUnit();
         String bolusAmount = Data.getBolusAmount();
         int tankVolume = Integer.parseInt(Data.getCartridge());
-        if(bolusAmount.length()<1) {
+        if (bolusAmount.length() < 1) {
             bolusAmount = "0";
         }
-        if(choosedScaleUnit.equals("mg")) {
-            Data.setIngredientQuantity(bolusAmount);
+        if (choosedScaleUnit.equals("mg")) {
+            Data.setBasalRate(bolusAmount);
         }
-        if(choosedScaleUnit.equals("ml")) {
+        if (choosedScaleUnit.equals("ml")) {
             Data.setBasalRate(Calculation.convertBasalrateFromBolusAmountMl(new BigDecimal(bolusAmount), tankVolume).toString());
         }
 
         updateInProgress = false;
     }
 
-    private void updateBolusLock(){
+    private void updateBolusLock() {
         updateInProgress = true;
 
         if (boliPerHourInput.getText().length() > 0) {
@@ -161,21 +172,17 @@ public class PumpFragment extends Fragment {
         updateInProgress = false;
     }
 
-    private void updateBolusLockTime(){
+    private void updateBolusLockTime() {
         updateInProgress = true;
 
-        if (bolusLockTimeInput.getText().length() > 0){
+        if (bolusLockTimeInput.getText().length() > 0) {
             BigDecimal bolusLockTime = new BigDecimal(bolusLockTimeInput.getText().toString());
             BigDecimal help = new BigDecimal(5);
-            if (bolusLockTime.compareTo(help) == 0){
-                boliPerHourInput.setText(Calculation.BolusLock(bolusLockTime).toString());
-            } else {
-                bolusLockTime = new BigDecimal(5);
-                bolusLockTimeInput.setText("5");
+            if (bolusLockTime.compareTo(help) == 0) {
                 boliPerHourInput.setText(Calculation.BolusLock(bolusLockTime).toString());
             }
-        }
 
-        updateInProgress = false;
+            updateInProgress = false;
+        }
     }
 }
