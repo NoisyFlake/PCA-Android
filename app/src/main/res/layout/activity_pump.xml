@@ -76,7 +76,8 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="number"
-                android:hint="@string/label_number_hint" />
+                android:hint="60"
+                android:maxLength="2" />
         </LinearLayout>
 
         <LinearLayout
@@ -97,7 +98,8 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="number"
-                android:hint="@string/label_number_hint" />
+                android:hint="1"
+                android:maxLength="2" />
         </LinearLayout>
     </LinearLayout>
 

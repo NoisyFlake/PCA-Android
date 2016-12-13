@@ -34,9 +34,10 @@ public class Calculation {
     //Bolusmenge in ml = Basalrate * (1/Wirkstoffkonzentration)
     public static BigDecimal convertBolusAmountMgToMl(BigDecimal agentPerHour, BigDecimal agentAmount, int tankVolume) {
         BigDecimal concentration = getConcentration(agentAmount, tankVolume);
+
         BigDecimal one = new BigDecimal(1.0);
         if(concentration.compareTo(BigDecimal.valueOf(0.0)) == 0) {
-            return agentPerHour.multiply((one.divide(new BigDecimal(1.0), RoundingMode.HALF_UP)));
+            return agentPerHour;
         }
         return agentPerHour.multiply(one.divide(concentration,3,RoundingMode.HALF_UP));
     }
@@ -65,6 +66,23 @@ public class Calculation {
         divideHelp = divideHelp.divide(running,1, RoundingMode.HALF_UP);
 
         return divideHelp;
+    };
+
+    //Bolussperrzeit = 60 / BoliProStunde
+    public static BigDecimal BolusLockTime(BigDecimal boliPerHour){
+        BigDecimal dividehelp = new BigDecimal(60);
+
+        BigDecimal boliLockTime = dividehelp.divide(boliPerHour,0,RoundingMode.HALF_UP);
+
+        return boliLockTime;
+    };
+
+    //BoliProStunde = 60 / Bolussperrzeit
+    public static BigDecimal BolusLock(BigDecimal boliLockTime){
+        BigDecimal dividehelp = new BigDecimal(60);
+        BigDecimal bolusLock = dividehelp.divide(boliLockTime,0,RoundingMode.HALF_UP);
+
+        return bolusLock;
     };
 
 }
