@@ -72,8 +72,7 @@ public class PharmacyFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Data.setBasalRate(basalRateInput.getText().toString());
                 if (!updateInProgress) {
-                    updateAgentAmountPerTank();
-                    updatePumpViewBolusAmountInMg();
+                    updateIngredientQuantity();
                 }
             }
         });
@@ -86,8 +85,7 @@ public class PharmacyFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 Data.setDuration(String.valueOf(durationSeekBar.getProgress() + 1));
                 durationSeekBarCurrentValue.setText(String.valueOf(durationSeekBar.getProgress()+1));
-                updateAgentAmountPerTank();
-
+                updateIngredientQuantity();
             }
         });
 
@@ -98,7 +96,7 @@ public class PharmacyFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Data.setCartridge(cartridgeSpinner.getSelectedItem().toString());
-                updateDosageResult();
+                updateDosage();
             }
         });
 
@@ -111,9 +109,8 @@ public class PharmacyFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Data.setIngredientQuantity(ingredientQuantityInput.getText().toString());
                 if (!updateInProgress) {
-                    updateAgentPerHour();
-                    updateDosageResult();
-                    updatePumpViewBolusAmountInMg();
+                    updateBasalRate();
+                    updateDosage();
                 }
             }
         });
@@ -121,37 +118,23 @@ public class PharmacyFragment extends Fragment {
         return pharmacyView;
     }
 
-    private void updateAgentAmountPerTank() {
+    private void updateIngredientQuantity() {
         updateInProgress = true;
-
-        BigDecimal agentPerHour = new BigDecimal(Data.getBasalRate());
-        int runtime = Integer.parseInt(Data.getDuration());
-
-        ingredientQuantityInput.setText(Calculation.getAgentAmountPerTank(agentPerHour, runtime).toString());
-        updateDosageResult();
+        Data.setIngredientQuantity(Calculation.getIngredientQuantity().toString());
+        ingredientQuantityInput.setText(Data.getIngredientQuantity());
+        updateDosage();
         updateInProgress = false;
     }
 
-    private void updateDosageResult() {
-        BigDecimal agentAmountPerTank = new BigDecimal(Data.getIngredientQuantity());
-        int tankVolume = Integer.parseInt(Data.getCartridge());
-
-        Data.setDosage(Calculation.getConcentration(agentAmountPerTank, tankVolume).toString());
+    private void updateDosage() {
+        Data.setDosage(Calculation.getDosage().toString());
         dosageResult.setText(Data.getDosage());
     }
 
-    private void updateAgentPerHour() {
+    private void updateBasalRate() {
         updateInProgress = true;
-
-        BigDecimal agentAmountPerTank = new BigDecimal(Data.getIngredientQuantity());
-        int runtime = Integer.parseInt(Data.getDuration());
-
-        basalRateInput.setText(Calculation.getAgentPerHour(agentAmountPerTank,runtime).toString());
-
+        Data.setBasalRate(Calculation.getBasalRate().toString());
+        basalRateInput.setText(Data.getBasalRate());
         updateInProgress = false;
-    }
-
-    private void updatePumpViewBolusAmountInMg() {
-        Data.setBolusAmount(Data.getBasalRate());
     }
 }

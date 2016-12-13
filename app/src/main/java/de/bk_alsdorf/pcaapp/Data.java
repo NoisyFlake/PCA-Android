@@ -1,13 +1,13 @@
 package de.bk_alsdorf.pcaapp;
 
 public class Data {
-    private static String basalRate = "0";
+    private static String basalRate = "0"; // is also used as bolusAmount in mg
     private static String cartridge = "50";
     private static String duration = "10";
     private static String ingredientQuantity = "0";
     private static String dosage = "0";
 
-    private static String bolusAmount = "0";
+    private static String bolusAmount = "0"; // ml ONLY
     private static String bolusUnit = "0";
     private static String bolusLock = "0";
     private static String boliPerHour = "0";

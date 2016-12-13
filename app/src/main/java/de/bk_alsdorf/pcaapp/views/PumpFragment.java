@@ -66,13 +66,10 @@ public class PumpFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(Data.getBolusUnit().equals("mg")) {
-                    Data.setBolusAmount(bolusAmountInput.getText().toString());
                     Data.setBasalRate(bolusAmountInput.getText().toString());
                 } else {
-                    Data.setBolusAmount(Calculation.convertBolusAmountMlToMg(new BigDecimal(Data.getBasalRate()),
-                            new BigDecimal(Data.getIngredientQuantity()), Integer.parseInt(Data.getCartridge())).toString());
-                    Data.setBasalRate(Calculation.convertBolusAmountMlToMg(new BigDecimal(Data.getBasalRate()),
-                            new BigDecimal(Data.getIngredientQuantity()), Integer.parseInt(Data.getCartridge())).toString());
+                    Data.setBolusAmount(bolusAmountInput.getText().toString());
+                    Data.setBasalRate(Calculation.convertBolusAmountMlToMg().toString());
                 }
             }
         });
@@ -110,7 +107,7 @@ public class PumpFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Data.setBolusLock(bolusLockTimeInput.getText().toString());
                 if (!updateInProgress) {
-                    updateBolusLockTime();
+                    updateBoliPerHour();
                 }
             }
         });
@@ -124,29 +121,9 @@ public class PumpFragment extends Fragment {
         updateInProgress = true;
 
         if(Data.getBolusUnit().equals("mg")) {
-            bolusAmountInput.setText(Data.getBolusAmount());
+            bolusAmountInput.setText(Data.getBasalRate());
         } else {
-            bolusAmountInput.setText(Calculation.convertBolusAmountMgToMl(new BigDecimal(Data.getBasalRate()),
-                    new BigDecimal(Data.getIngredientQuantity()), Integer.parseInt(Data.getCartridge())).toString());
-        }
-
-        updateInProgress = false;
-    }
-
-    //Update agentPerHour and agentAmount in pharmacy view if bolus amount input is changed
-    private void updatePharmacyInputsInMl(){
-        updateInProgress = true;
-        String choosedScaleUnit = Data.getBolusUnit();
-        String bolusAmount = Data.getBolusAmount();
-        int tankVolume = Integer.parseInt(Data.getCartridge());
-        if(Double.parseDouble(bolusAmount) == 0) {
-            bolusAmount = "0";
-        }
-        if(choosedScaleUnit.equals("mg")) {
-            Data.setIngredientQuantity(bolusAmount);
-        }
-        if(choosedScaleUnit.equals("ml")) {
-            Data.setBasalRate(Calculation.convertBasalrateFromBolusAmountMl(new BigDecimal(bolusAmount), tankVolume).toString());
+            bolusAmountInput.setText(Calculation.convertBolusAmountMgToMl().toString());
         }
 
         updateInProgress = false;
@@ -156,26 +133,17 @@ public class PumpFragment extends Fragment {
         updateInProgress = true;
 
         if (boliPerHourInput.getText().length() > 0) {
-            BigDecimal bolusLock = new BigDecimal(boliPerHourInput.getText().toString());
-            bolusLockTimeInput.setText(Calculation.BolusLockTime(bolusLock).toString());
+            bolusLockTimeInput.setText(Calculation.getBolusLock().toString());
         }
 
         updateInProgress = false;
     }
 
-    private void updateBolusLockTime(){
+    private void updateBoliPerHour(){
         updateInProgress = true;
 
         if (bolusLockTimeInput.getText().length() > 0){
-            BigDecimal bolusLockTime = new BigDecimal(bolusLockTimeInput.getText().toString());
-            BigDecimal help = new BigDecimal(5);
-            if (bolusLockTime.compareTo(help) == 0){
-                boliPerHourInput.setText(Calculation.BolusLock(bolusLockTime).toString());
-            } else {
-                bolusLockTime = new BigDecimal(5);
-                bolusLockTimeInput.setText("5");
-                boliPerHourInput.setText(Calculation.BolusLock(bolusLockTime).toString());
-            }
+            boliPerHourInput.setText(Calculation.getBoliPerHour().toString());
         }
 
         updateInProgress = false;

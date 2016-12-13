@@ -6,87 +6,82 @@ import java.math.RoundingMode;
 public class Calculation {
 
     // Wirkstoffmenge = Basalrate in mg/h * 24 * Laufzeit in Tagen
-    public static BigDecimal getAgentAmountPerTank(BigDecimal agentPerHour, int runtime) {
-        BigDecimal agentAmountPerTank = agentPerHour.multiply(new BigDecimal(24)).multiply(new BigDecimal(runtime));
-        return agentAmountPerTank.setScale(1, BigDecimal.ROUND_HALF_UP);
-    }
+    public static BigDecimal getIngredientQuantity() {
+        BigDecimal basalRate = new BigDecimal(Data.getBasalRate());
+        BigDecimal duration = new BigDecimal(Data.getDuration());
 
-    // Basalrate = Basalrate in mg/h * Wirkstoffkonzentration
-    public static BigDecimal getBasalRate(BigDecimal agentPerHour, BigDecimal concentration) {
-        BigDecimal basalRate = agentPerHour.multiply(concentration);
-        return basalRate.setScale(1, BigDecimal.ROUND_HALF_UP);
+        BigDecimal ingredientQuantity = basalRate.multiply(new BigDecimal(24)).multiply(duration);
+        return ingredientQuantity.setScale(1, BigDecimal.ROUND_HALF_UP);
     }
 
     // Wirkstoffkonzentration = Wirkstoffmenge / Kassettenvolumen
-    public static BigDecimal getConcentration(BigDecimal agentAmount, int tankVolume) {
-        return agentAmount.divide(new BigDecimal(tankVolume), 1, RoundingMode.HALF_UP);
+    public static BigDecimal getDosage() {
+        BigDecimal ingredientQuantity = new BigDecimal(Data.getIngredientQuantity());
+        BigDecimal cartridge = new BigDecimal(Data.getCartridge());
+        return ingredientQuantity.divide(cartridge, 1, RoundingMode.HALF_UP);
     }
 
+    //Bolusmenge in ml = Basalrate * (1/Wirkstoffkonzentration)
+    public static BigDecimal convertBolusAmountMgToMl() {
+        BigDecimal basalRate = new BigDecimal(Data.getBasalRate());
+        BigDecimal dosage = new BigDecimal(Data.getDosage());
+
+        if(dosage.compareTo(BigDecimal.valueOf(0.0)) == 0) {
+            return new BigDecimal(0);
+        }
+
+        BigDecimal one = new BigDecimal(1.0);
+        BigDecimal bolusAmount = basalRate.multiply(one.divide(dosage,3,RoundingMode.HALF_UP));
+        return bolusAmount.setScale(1, BigDecimal.ROUND_HALF_UP);
+    }
+
+    //Bolusmenge in mg = Bolusmenge in ml * Konzentration
+    public static BigDecimal convertBolusAmountMlToMg() {
+        BigDecimal bolusAmount = new BigDecimal(Data.getBolusAmount());
+        BigDecimal dosage = new BigDecimal(Data.getDosage());
+
+        BigDecimal basalRate = bolusAmount.multiply(dosage);
+        return basalRate.setScale(1, BigDecimal.ROUND_HALF_UP);
+    }
+
+    // Basalrate in mg/h = Wirkstoffmenge / 24 / laufzeit
+    public static BigDecimal getBasalRate(){
+        BigDecimal ingredientQuantity = new BigDecimal(Data.getIngredientQuantity());
+        BigDecimal duration = new BigDecimal(Data.getDuration());
+
+        BigDecimal oneDay = new BigDecimal(24);
+
+        BigDecimal divideHelp = ingredientQuantity.divide(oneDay, RoundingMode.HALF_UP);
+        BigDecimal basalRate = divideHelp.divide(duration,1, RoundingMode.HALF_UP);
+
+        return basalRate;
+    };
+
+    // Bolussperrzeit = 60 / Boli Pro Stunde
+    public static BigDecimal getBolusLock(){
+        BigDecimal oneHour = new BigDecimal(60);
+        BigDecimal boliPerHour = new BigDecimal(Data.getBoliPerHour());
+        BigDecimal bolusLock = oneHour.divide(boliPerHour,0,RoundingMode.HALF_UP);
+
+        return bolusLock;
+    };
+
+    //Boli Pro Stunde = 60 / Bolussperrzeit
+    public static BigDecimal getBoliPerHour(){
+        BigDecimal oneHour = new BigDecimal(60);
+        BigDecimal bolusLock = new BigDecimal(Data.getBolusLock());
+        BigDecimal boliPerHour = oneHour.divide(bolusLock,0,RoundingMode.HALF_UP);
+
+        return boliPerHour;
+    };
+
     // Minimale Laufzeit = Kassettenvolumen / ( Basalrate + ( Anzahl Boli pro Stunde * Wirkstoffmenge je Bolus ))
-    public static BigDecimal getMinimumRuntime(BigDecimal bolusAmount, int bolusPerHour, BigDecimal basalRate, int tankVolume) {
+    /* public static BigDecimal getMinimumRuntime(BigDecimal bolusAmount, int bolusPerHour, BigDecimal basalRate, int tankVolume) {
         BigDecimal maxBoliAgentPerHour = bolusAmount.multiply(new BigDecimal(bolusPerHour));
         BigDecimal maxAgentPerHour = basalRate.add(maxBoliAgentPerHour);
 
         if (maxAgentPerHour.compareTo(new BigDecimal(0)) == 0) return new BigDecimal(0);
         return new BigDecimal(tankVolume).divide(maxAgentPerHour, 1, RoundingMode.HALF_UP);
-    }
-
-    // Bolusmenge in mg = Basalrate
-    public static BigDecimal convertBolusAmountMlToMg(BigDecimal agentPerHour, BigDecimal agentAmount, int tankVolume) {
-        BigDecimal concentration = getConcentration(agentAmount, tankVolume);
-        return getBasalRate(agentPerHour, concentration);
-    }
-
-    //Bolusmenge in ml = Basalrate * (1/Wirkstoffkonzentration)
-    public static BigDecimal convertBolusAmountMgToMl(BigDecimal agentPerHour, BigDecimal agentAmount, int tankVolume) {
-        BigDecimal concentration = getConcentration(agentAmount, tankVolume);
-
-        BigDecimal one = new BigDecimal(1.0);
-        if(concentration.compareTo(BigDecimal.valueOf(0.0)) == 0) {
-            return agentPerHour;
-        }
-        return agentPerHour.multiply(one.divide(concentration,3,RoundingMode.HALF_UP));
-    }
-
-    // Basalrate = Bolusmenge in ml / (1/Wirkstoffkonzentration)
-    public static BigDecimal convertBasalrateFromBolusAmountMl(BigDecimal bolusAmount, int tankVolume) {
-        BigDecimal concentration = getConcentration(bolusAmount, tankVolume);
-        BigDecimal one = new BigDecimal(1.0);
-        if(concentration.compareTo(BigDecimal.valueOf(0.0)) == 0) {
-            concentration = one.divide(one, 1, RoundingMode.HALF_UP);
-            return bolusAmount.divide(concentration);
-        } else {
-            concentration = one.divide(concentration, 1, RoundingMode.HALF_UP);
-            return bolusAmount.divide(concentration);
-        }
-    }
-
-    // Basalrate in mg/h = Wirkstoffmenge / 24 / laufzeit
-    public static BigDecimal getAgentPerHour(BigDecimal agentAmountPerTank, int runtime){
-        BigDecimal running = new BigDecimal(runtime);
-        BigDecimal daytime = new BigDecimal(24);
-        BigDecimal divideHelp;
-
-        divideHelp = agentAmountPerTank.divide(daytime,5, RoundingMode.HALF_UP);
-        divideHelp = divideHelp.divide(running,1, RoundingMode.HALF_UP);
-
-        return divideHelp;
-    };
-
-    //Bolussperrzeit = 60 / BoliProStunde
-    public static BigDecimal BolusLockTime(BigDecimal boliPerHour){
-        BigDecimal dividehelp = new BigDecimal(60);
-        BigDecimal boliLockTime = dividehelp.divide(boliPerHour,0,RoundingMode.HALF_UP);
-
-        return boliLockTime;
-    };
-
-    //BoliProStunde = 60 / Bolussperrzeit
-    public static BigDecimal BolusLock(BigDecimal boliLockTime){
-        BigDecimal dividehelp = new BigDecimal(60);
-        BigDecimal bolusLock = dividehelp.divide(boliLockTime,0,RoundingMode.HALF_UP);
-
-        return bolusLock;
-    };
+    } */
 
 }
