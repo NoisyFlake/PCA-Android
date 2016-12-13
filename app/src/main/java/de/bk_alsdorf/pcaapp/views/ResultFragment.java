@@ -62,15 +62,18 @@ public class ResultFragment extends Fragment {
         dosageResult.setText(Data.getDosage());
 
         if (Data.getBolusAmount().length() > 0 && !Data.getBolusAmount().equals("0.0")) {
-            bolusAmountResult.setText(Data.getBolusAmount());
+            String bolusAmount = Data.getBolusAmount() + " " + Data.getBolusUnit();
+            bolusAmountResult.setText(bolusAmount);
         }
 
         if (Data.getBolusLock().length() > 0 && !Data.getBolusLock().equals("0.0")) {
-            bolusLockResult.setText(Data.getBolusLock());
+            String bolusLock = Data.getBolusLock() + " Minuten";
+            bolusLockResult.setText(bolusLock);
         }
 
         if (Data.getBoliPerHour().length() > 0 && !Data.getBoliPerHour().equals("0.0")) {
-            boliPerHourResult.setText(Data.getBoliPerHour());
+            String boliPerHour = Data.getBoliPerHour() + " pro Stunde";
+            boliPerHourResult.setText(boliPerHour);
         }
     }
 
