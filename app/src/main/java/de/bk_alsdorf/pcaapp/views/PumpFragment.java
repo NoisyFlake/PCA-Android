@@ -20,13 +20,7 @@ import de.bk_alsdorf.pcaapp.R;
 public class PumpFragment extends Fragment {
     private EditText bolusAmountInput;
     private Spinner bolusSpinner;
-
-    private EditText bolusLockInput;
-    private EditText boliPerHour;
     private EditText bolusLockTimeInput;
-    private EditText basalRateInput;
-    private EditText indrigendQuantityInput;
-
     private boolean updateInProgress;
     private EditText boliPerHourInput;
 
@@ -61,8 +55,6 @@ public class PumpFragment extends Fragment {
         boliPerHourInput = (EditText) pumpView.findViewById(R.id.boliPerHourInput);
         bolusLockTimeInput = (EditText) pumpView.findViewById(R.id.bolusLockInput);
 
-
-
         bolusAmountInput.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {}
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -75,7 +67,6 @@ public class PumpFragment extends Fragment {
 
 
         bolusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
             public void onNothingSelected(AdapterView<?> arg0) { }
 
             @Override
@@ -92,6 +83,7 @@ public class PumpFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Data.setBoliPerHour(boliPerHourInput.getText().toString());
                 if (!updateInProgress) {
                     updateBolusLock();
                 }
@@ -99,16 +91,12 @@ public class PumpFragment extends Fragment {
         });
 
         bolusLockTimeInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Data.setBolusLock(bolusLockTimeInput.getText().toString());
                 if (!updateInProgress) {
                     updateBolusLockTime();
                 }
@@ -143,10 +131,10 @@ public class PumpFragment extends Fragment {
         updateInProgress = true;
 
         if (boliPerHourInput.getText().length() > 0) {
-
             BigDecimal bolusLock = new BigDecimal(boliPerHourInput.getText().toString());
             bolusLockTimeInput.setText(Calculation.BolusLockTime(bolusLock).toString());
         }
+
         updateInProgress = false;
     }
 

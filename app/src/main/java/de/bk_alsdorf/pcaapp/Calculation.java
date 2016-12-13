@@ -57,7 +57,6 @@ public class Calculation {
 
     // Basalrate in mg/h = Wirkstoffmenge / 24 / laufzeit
     public static BigDecimal getAgentPerHour(BigDecimal agentAmountPerTank, int runtime){
-
         BigDecimal running = new BigDecimal(runtime);
         BigDecimal daytime = new BigDecimal(24);
         BigDecimal divideHelp;
@@ -71,7 +70,6 @@ public class Calculation {
     //Bolussperrzeit = 60 / BoliProStunde
     public static BigDecimal BolusLockTime(BigDecimal boliPerHour){
         BigDecimal dividehelp = new BigDecimal(60);
-
         BigDecimal boliLockTime = dividehelp.divide(boliPerHour,0,RoundingMode.HALF_UP);
 
         return boliLockTime;
