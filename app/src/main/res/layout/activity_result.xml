@@ -190,6 +190,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/result_not_given" />
         </LinearLayout>
+
+        <Button
+            android:text="@string/btn_screenshot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/screenshotBtn" />
     </LinearLayout>
 
     <!--Footer for dosage information-->

@@ -1,15 +1,23 @@
 package de.bk_alsdorf.pcaapp.views;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import de.bk_alsdorf.pcaapp.Data;
 import de.bk_alsdorf.pcaapp.R;
@@ -25,6 +33,7 @@ public class ResultFragment extends Fragment {
     private TextView bolusAmountResult;
     private TextView bolusLockResult;
     private TextView boliPerHourResult;
+    private Button screenshotButton;
 
     public ResultFragment() {}
 
@@ -89,12 +98,60 @@ public class ResultFragment extends Fragment {
         bolusAmountResult = (TextView) resultView.findViewById(R.id.bolusAmountResult);
         bolusLockResult = (TextView) resultView.findViewById(R.id.bolusLockResult);
         boliPerHourResult = (TextView) resultView.findViewById(R.id.boliPerHourResult);
+        screenshotButton = (Button) resultView.findViewById(R.id.screenshotBtn);
 
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         String date = df.format(Calendar.getInstance().getTime());
 
         resultDate.setText(date);
 
+        screenshotButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takeScreenshot(resultView);
+            }
+        });
+
         return resultView;
+    }
+
+    private void takeScreenshot(View view) {
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+        try {
+            // image naming and path  to include sd card  appending name you choose for file
+            String mPath = Environment.getExternalStorageDirectory().getAbsolutePath().toString() + "/123.jpg";
+
+            // create bitmap screen capture
+            view.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+            view.setDrawingCacheEnabled(false);
+
+            File imageFile = new File(mPath);
+            try {
+                FileOutputStream outputStream = new FileOutputStream(imageFile);
+                int quality = 100;
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+                outputStream.flush();
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            openScreenshot(imageFile);
+        } catch (Throwable e) {
+            // Several error may come out with file handling or OOM
+            e.printStackTrace();
+        }
+    }
+
+    private void openScreenshot(File imageFile) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        Uri uri = Uri.fromFile(imageFile);
+        intent.setDataAndType(uri, "image/*");
+        startActivity(intent);
     }
 }

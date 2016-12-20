@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">PCA App</string>
 
+    <string name="btn_screenshot">Als Bild speichern</string>
+
     <string name="dosage_result_mg_ml">mg/ml</string>
 
     <string name="label_basal_rate">Basalrate in mg/h</string>
