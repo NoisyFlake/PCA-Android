@@ -1,11 +1,15 @@
 package de.bk_alsdorf.pcaapp.views;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import de.bk_alsdorf.pcaapp.Data;
+import de.bk_alsdorf.pcaapp.MainActivity;
 import de.bk_alsdorf.pcaapp.R;
 
 public class ResultFragment extends Fragment {
@@ -118,16 +123,14 @@ public class ResultFragment extends Fragment {
     private void takeScreenshot(View view) {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-
         try {
             // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().getAbsolutePath().toString() + "/123.jpg";
+            String mPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/123.jpg";
 
             // create bitmap screen capture
             view.setDrawingCacheEnabled(true);
             Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
             view.setDrawingCacheEnabled(false);
-
             File imageFile = new File(mPath);
             try {
                 FileOutputStream outputStream = new FileOutputStream(imageFile);
