@@ -1,6 +1,7 @@
 package de.bk_alsdorf.pcaapp.views;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -113,48 +115,50 @@ public class ResultFragment extends Fragment {
         screenshotButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takeScreenshot(resultView);
+                storeScreenshot(getScreenShot(v));
             }
         });
 
         return resultView;
     }
 
-    private void takeScreenshot(View view) {
-        Date now = new Date();
-        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-        try {
-            // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/123.jpg";
-
-            // create bitmap screen capture
-            view.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
-            view.setDrawingCacheEnabled(false);
-            File imageFile = new File(mPath);
-            try {
-                FileOutputStream outputStream = new FileOutputStream(imageFile);
-                int quality = 100;
-                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-                outputStream.flush();
-                outputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-            openScreenshot(imageFile);
-        } catch (Throwable e) {
-            // Several error may come out with file handling or OOM
-            e.printStackTrace();
-        }
+    private Bitmap getScreenShot(View view) {
+        View screenView = view.getRootView();
+        screenView.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(screenView.getDrawingCache());
+        screenView.setDrawingCacheEnabled(false);
+        return bitmap;
     }
 
-    private void openScreenshot(File imageFile) {
+    private void storeScreenshot(Bitmap bitmap){
+        Date now = new Date();
+        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+        final String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Screenshots" + now + ".jpg";
+        File imageFile = new File(dirPath);
+        try {
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            int quality = 100;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+            outputStream.flush();
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        shareImage(imageFile);
+    }
+    private void shareImage(File file){
+        Uri uri = Uri.fromFile(file);
         Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        Uri uri = Uri.fromFile(imageFile);
-        intent.setDataAndType(uri, "image/*");
-        startActivity(intent);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        try {
+            startActivity(Intent.createChooser(intent, "Share Screenshot"));
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
