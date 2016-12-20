@@ -27,6 +27,9 @@ import de.bk_alsdorf.pcaapp.Data;
 import de.bk_alsdorf.pcaapp.MainActivity;
 import de.bk_alsdorf.pcaapp.R;
 
+import static de.bk_alsdorf.pcaapp.Data.setBolusAmount;
+import static de.bk_alsdorf.pcaapp.R.id.bolusAmountInput;
+
 public class ResultFragment extends Fragment {
 
     private TextView resultDate;
@@ -75,9 +78,13 @@ public class ResultFragment extends Fragment {
 
         dosageResult.setText(Data.getDosage());
 
-        if (Data.getBolusAmount().length() > 0 && !Data.getBolusAmount().equals("0.0")) {
-            String bolusAmount = Data.getBolusAmount() + " " + Data.getBolusUnit();
-            bolusAmountResult.setText(bolusAmount);
+        if(Data.getBolusUnit().equals("mg")) {
+            bolusAmountResult.setText(Data.getBasalRate() + " " + Data.getBolusUnit());
+        } else {
+            if (Data.getBolusAmount().length() > 0 && !Data.getBolusAmount().equals("0.0")) {
+                String bolusAmount = Data.getBolusAmount() + " " + Data.getBolusUnit();
+                bolusAmountResult.setText(bolusAmount);
+            }
         }
 
         if (Data.getBolusLock().length() > 0 && !Data.getBolusLock().equals("0.0")) {
