@@ -18,6 +18,8 @@ import de.bk_alsdorf.pcaapp.Calculation;
 import de.bk_alsdorf.pcaapp.Data;
 import de.bk_alsdorf.pcaapp.R;
 
+import static de.bk_alsdorf.pcaapp.Data.setBolusAmount;
+
 public class PumpFragment extends Fragment {
     private EditText bolusAmountInput;
     private Spinner bolusSpinner;
@@ -68,6 +70,7 @@ public class PumpFragment extends Fragment {
                 if(Data.getBolusUnit().equals("mg")) {
                     Data.setBasalRate(bolusAmountInput.getText().toString());
                 } else {
+
                     if (!updateInProgress) {
                         Data.setBolusAmount(bolusAmountInput.getText().toString());
                         Data.setBolusAmountDisplay(bolusAmountInput.getText().toString());
