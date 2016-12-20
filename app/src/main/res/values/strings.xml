@@ -7,7 +7,7 @@
 
     <string name="label_basal_rate">Basalrate in mg/h</string>
     <string name="label_boli_per_hour">Boli pro Stunde</string>
-    <string name="label_bolus_amount">Bolusmenge</string>
+    <string name="label_bolus_amount">Kontinuierliche Rate pro h</string>
     <string name="label_bolus_lock">Bolussperrzeit</string>
     <string name="label_cartridge">Kassettenvolumen in ml</string>
     <string name="label_dosage">Wirkstoffkonzentration</string>
@@ -19,7 +19,7 @@
     <string name="result_not_given">Keine Angabe</string>
     <string name="result_basal_rate">Basalrate:</string>
     <string name="result_boli_per_hour">Boli:</string>
-    <string name="result_bolus_amount">Bolusmenge:</string>
+    <string name="result_bolus_amount">Bolus:</string>
     <string name="result_bolus_lock">Bolussperrzeit:</string>
     <string name="result_cartridge">Kassettenvolumen:</string>
     <string name="result_dosage">Wirkstoffkonzentration:</string>
