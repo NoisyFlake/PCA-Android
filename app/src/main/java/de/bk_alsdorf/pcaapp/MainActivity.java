@@ -2,8 +2,12 @@ package de.bk_alsdorf.pcaapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private static ContentResolver content;
 
 
     @Override
@@ -31,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTabLayout();
         checkPermissionToTakeScreenshot(this);
+        this.content = this.getContentResolver();
     }
 
     private void setTabLayout() {
@@ -114,5 +120,17 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_EXTERNAL_STORAGE
             );
         }
+    }
+
+
+    public static void addImageToGallery(final String filePath) {
+
+        ContentValues values = new ContentValues();
+
+        values.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis());
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        values.put(MediaStore.MediaColumns.DATA, filePath);
+
+        content.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
     }
 }

@@ -2,12 +2,15 @@ package de.bk_alsdorf.pcaapp.views;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -140,14 +143,17 @@ public class ResultFragment extends Fragment {
     private void storeScreenshot(Bitmap bitmap){
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-        final String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Screenshots" + now + ".jpg";
-        File imageFile = new File(dirPath);
+        final File dirPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/DCIM/Screenshots/");
+        dirPath.mkdirs();
+        File imageFile = new File(dirPath, now + ".jpg");
         try {
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             int quality = 100;
             bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
             outputStream.flush();
             outputStream.close();
+            MainActivity.addImageToGallery(imageFile.getAbsolutePath());
+           //MediaStore.Images.Media.insertImage(getContentResolver(), imageFile, "Test", "TestDesc")
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -168,4 +174,5 @@ public class ResultFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
 }
