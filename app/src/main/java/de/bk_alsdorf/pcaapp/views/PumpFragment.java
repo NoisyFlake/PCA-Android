@@ -43,7 +43,7 @@ public class PumpFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser) {
-            if(!updateInProgress) {
+            if (!updateInProgress) {
                 updateBolusAmountInputByBolusUnit();
                 dosageResult.setText(Data.getDosage());
             }
@@ -68,8 +68,12 @@ public class PumpFragment extends Fragment {
                 if(Data.getBolusUnit().equals("mg")) {
                     Data.setBasalRate(bolusAmountInput.getText().toString());
                 } else {
-                    Data.setBolusAmount(bolusAmountInput.getText().toString());
+                    if (!updateInProgress) {
+                        Data.setBolusAmount(bolusAmountInput.getText().toString());
+                        Data.setBolusAmountDisplay(bolusAmountInput.getText().toString());
+                    }
                     Data.setBasalRate(Calculation.convertBolusAmountMlToMg().toString());
+                    Data.setBasalRateDisplay(Calculation.convertBolusAmountMlToMg().setScale(1, BigDecimal.ROUND_HALF_UP).toString());
                 }
             }
         });
@@ -121,9 +125,12 @@ public class PumpFragment extends Fragment {
         updateInProgress = true;
 
         if(Data.getBolusUnit().equals("mg")) {
-            bolusAmountInput.setText(Data.getBasalRate());
+            bolusAmountInput.setText(Data.getBasalRateDisplay());
         } else {
-            bolusAmountInput.setText(Calculation.convertBolusAmountMgToMl().toString());
+            BigDecimal bolusAmount = Calculation.convertBolusAmountMgToMl();
+            Data.setBolusAmount(bolusAmount.toString());
+            Data.setBolusAmountDisplay(bolusAmount.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
+            bolusAmountInput.setText(Data.getBolusAmountDisplay());
         }
 
         updateInProgress = false;

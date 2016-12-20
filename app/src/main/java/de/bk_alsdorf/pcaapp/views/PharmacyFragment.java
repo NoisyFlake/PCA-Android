@@ -48,7 +48,7 @@ public class PharmacyFragment extends Fragment {
         if (isVisibleToUser) {
             if(!updateInProgress) {
                 if(basalRateInput != null){
-                    basalRateInput.setText(Data.getBasalRate());
+                    basalRateInput.setText(Data.getBasalRateDisplay());
                 }
             }
         }
@@ -71,6 +71,7 @@ public class PharmacyFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Data.setBasalRate(basalRateInput.getText().toString());
+                Data.setBasalRateDisplay(basalRateInput.getText().toString());
                 if (!updateInProgress) {
                     updateIngredientQuantity();
                 }

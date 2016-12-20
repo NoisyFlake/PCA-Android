@@ -31,8 +31,8 @@ public class Calculation {
         }
 
         BigDecimal one = new BigDecimal(1.0);
-        BigDecimal bolusAmount = basalRate.multiply(one.divide(dosage,3,RoundingMode.HALF_UP));
-        return bolusAmount.setScale(1, BigDecimal.ROUND_HALF_UP);
+        BigDecimal bolusAmount = basalRate.multiply(one.divide(dosage,4,RoundingMode.HALF_UP));
+        return bolusAmount;
     }
 
     //Bolusmenge in mg = Bolusmenge in ml * Konzentration
@@ -41,7 +41,7 @@ public class Calculation {
         BigDecimal dosage = new BigDecimal(Data.getDosage());
 
         BigDecimal basalRate = bolusAmount.multiply(dosage);
-        return basalRate.setScale(1, BigDecimal.ROUND_HALF_UP);
+        return basalRate;
     }
 
     // Basalrate in mg/h = Wirkstoffmenge / 24 / laufzeit
