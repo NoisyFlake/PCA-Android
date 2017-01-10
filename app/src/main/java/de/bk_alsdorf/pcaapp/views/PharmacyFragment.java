@@ -1,5 +1,6 @@
 package de.bk_alsdorf.pcaapp.views;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -15,9 +16,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-import java.math.BigDecimal;
-
-import de.bk_alsdorf.pcaapp.Calculation;
 import de.bk_alsdorf.pcaapp.Data;
 import de.bk_alsdorf.pcaapp.R;
 
@@ -61,14 +59,31 @@ public class PharmacyFragment extends Fragment {
         ingredientQuantityInput = (EditText) pharmacyView.findViewById(R.id.ingredientQuantityInput);
         dosageResult = (TextView) pharmacyView.findViewById(R.id.dosageResult);
 
-        basalRateInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        basalRateInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    double basalRate = Double.parseDouble(basalRateInput.getText().toString());
-                    Data.setBasalRate(basalRate);
-                    updateData();
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                double basalRate;
+                try {
+                    basalRate = Double.parseDouble(v.getText().toString());
+                } catch(NumberFormatException e) {
+                    basalRate = 0;
                 }
+
+                Data.setBasalRate(basalRate);
+                updateData();
+
+                return false;
+            }
+        });
+
+        basalRateInput.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                basalRateInput.setTextColor(Color.RED);
+                ingredientQuantityInput.setTextColor(Color.GRAY);
             }
         });
 
@@ -77,7 +92,7 @@ public class PharmacyFragment extends Fragment {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                int cartridge = Integer.parseInt(cartridgeSpinner.getSelectedItem().toString());
+                int cartridge = Integer.parseInt(parent.getSelectedItem().toString());
                 Data.setCartridge(cartridge);
                 updateData();
             }
@@ -89,77 +104,40 @@ public class PharmacyFragment extends Fragment {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                int duration = progress + 1;
-                Data.setDuration(duration);
+                Data.setDuration(progress + 1);
                 durationSeekBarCurrentValue.setText(String.valueOf(Data.getDuration()));
                 updateData();
             }
         });
 
-        ingredientQuantityInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        ingredientQuantityInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    double ingredientQuantity = Double.parseDouble(ingredientQuantityInput.getText().toString());
-                    Data.setIngredientQuantity(ingredientQuantity);
-                    updateData();
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                double ingredientQuantity;
+                try {
+                    ingredientQuantity = Double.parseDouble(v.getText().toString());
+                } catch (NumberFormatException e) {
+                    ingredientQuantity = 0;
                 }
+
+                Data.setIngredientQuantity(ingredientQuantity);
+                updateData();
+
+                return false;
             }
         });
 
+        ingredientQuantityInput.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
+            @Override
+            public void afterTextChanged(Editable s) {
+                ingredientQuantityInput.setTextColor(Color.RED);
+                basalRateInput.setTextColor(Color.GRAY);
+            }
+        });
 
-//        basalRateInput.addTextChangedListener(new TextWatcher() {
-//            public void afterTextChanged(Editable s) {}
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                Data.setBasalRate(basalRateInput.getText().toString());
-//                Data.setBasalRateDisplay(basalRateInput.getText().toString());
-//                if (!updateInProgress) {
-//                    updateIngredientQuantity();
-//                }
-//            }
-//        });
-//
-//        durationSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            public void onStopTrackingTouch(SeekBar seekBar) {}
-//            public void onStartTrackingTouch(SeekBar seekBar) {}
-//
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                Data.setDuration(String.valueOf(durationSeekBar.getProgress() + 1));
-//                durationSeekBarCurrentValue.setText(String.valueOf(durationSeekBar.getProgress()+1));
-//                updateIngredientQuantity();
-//            }
-//        });
-//
-//
-//        cartridgeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-//            public void onNothingSelected(AdapterView<?> arg0) {}
-//
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Data.setCartridge(cartridgeSpinner.getSelectedItem().toString());
-//                updateDosage();
-//            }
-//        });
-//
-//
-//        ingredientQuantityInput.addTextChangedListener(new TextWatcher() {
-//            public void afterTextChanged(Editable s) {}
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                Data.setIngredientQuantity(ingredientQuantityInput.getText().toString());
-//                if (!updateInProgress) {
-//                    updateBasalRate();
-//                    updateDosage();
-//                }
-//            }
-//        });
         init = true;
         return pharmacyView;
     }
@@ -174,25 +152,9 @@ public class PharmacyFragment extends Fragment {
         basalRateInput.setText(basalRate);
         ingredientQuantityInput.setText(ingredientQuantity);
         dosageResult.setText(dosage);
+
+        ingredientQuantityInput.setTextColor(Color.BLACK);
+        basalRateInput.setTextColor(Color.BLACK);
     }
 
-//    private void updateIngredientQuantity() {
-//        updateInProgress = true;
-//        Data.setIngredientQuantity(Calculation.getIngredientQuantity().toString());
-//        ingredientQuantityInput.setText(Data.getIngredientQuantity());
-//        updateDosage();
-//        updateInProgress = false;
-//    }
-//
-//    private void updateDosage() {
-//        Data.setDosage(Calculation.getDosage().toString());
-//        dosageResult.setText(Data.getDosage());
-//    }
-//
-//    private void updateBasalRate() {
-//        updateInProgress = true;
-//        Data.setBasalRate(Calculation.getBasalRate().toString());
-//        basalRateInput.setText(Data.getBasalRate());
-//        updateInProgress = false;
-//    }
 }
