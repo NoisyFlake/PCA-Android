@@ -6,74 +6,62 @@ import java.math.RoundingMode;
 public class Calculation {
 
     // Wirkstoffmenge = Basalrate in mg/h * 24 * Laufzeit in Tagen
-    public static BigDecimal getIngredientQuantity() {
-        BigDecimal basalRate = new BigDecimal(Data.getBasalRate());
-        BigDecimal duration = new BigDecimal(Data.getDuration());
+    public static double getIngredientQuantity() {
+        double basalRate = Data.getBasalRate();
+        int duration = Data.getDuration();
 
-        BigDecimal ingredientQuantity = basalRate.multiply(new BigDecimal(24)).multiply(duration);
-        return ingredientQuantity.setScale(1, BigDecimal.ROUND_HALF_UP);
+        return basalRate * (24 * duration);
     }
 
     // Wirkstoffkonzentration = Wirkstoffmenge / Kassettenvolumen
-    public static BigDecimal getDosage() {
-        BigDecimal ingredientQuantity = new BigDecimal(Data.getIngredientQuantity());
-        BigDecimal cartridge = new BigDecimal(Data.getCartridge());
-        return ingredientQuantity.divide(cartridge, 1, RoundingMode.HALF_UP);
+    public static double getDosage() {
+        double ingredientQuantity = Data.getIngredientQuantity();
+        int cartridge = Data.getCartridge();
+
+        return ingredientQuantity / cartridge;
     }
 
     //Bolusmenge in ml = Basalrate * (1/Wirkstoffkonzentration)
-    public static BigDecimal convertBolusAmountMgToMl() {
-        BigDecimal basalRate = new BigDecimal(Data.getBasalRate());
-        BigDecimal dosage = new BigDecimal(Data.getDosage());
+    public static double convertBolusAmountMgToMl() {
+        double basalRate = Data.getBasalRate();
+        double dosage = Data.getDosage();
 
-        if(dosage.compareTo(BigDecimal.valueOf(0.0)) == 0) {
-            return new BigDecimal(0);
-        }
+        if(dosage == 0) return 0;
 
-        BigDecimal one = new BigDecimal(1.0);
-        BigDecimal bolusAmount = basalRate.multiply(one.divide(dosage,4,RoundingMode.HALF_UP));
-        return bolusAmount;
+        return basalRate * (1/dosage);
     }
 
     //Bolusmenge in mg = Bolusmenge in ml * Konzentration
-    public static BigDecimal convertBolusAmountMlToMg() {
-        BigDecimal bolusAmount = new BigDecimal(Data.getBolusAmount());
-        BigDecimal dosage = new BigDecimal(Data.getDosage());
+    public static double convertBolusAmountMlToMg() {
+        double bolusAmount = Data.getBolusAmount();
+        double dosage = Data.getDosage();
 
-        BigDecimal basalRate = bolusAmount.multiply(dosage);
-        return basalRate;
+        return bolusAmount * dosage;
     }
 
     // Basalrate in mg/h = Wirkstoffmenge / 24 / laufzeit
-    public static BigDecimal getBasalRate(){
-        BigDecimal ingredientQuantity = new BigDecimal(Data.getIngredientQuantity());
-        BigDecimal duration = new BigDecimal(Data.getDuration());
+    public static double getBasalRate(){
+        double ingredientQuantity = Data.getIngredientQuantity();
+        int duration = Data.getDuration();
 
-        BigDecimal oneDay = new BigDecimal(24);
-
-        BigDecimal divideHelp = ingredientQuantity.divide(oneDay, RoundingMode.HALF_UP);
-        BigDecimal basalRate = divideHelp.divide(duration,1, RoundingMode.HALF_UP);
-
-        return basalRate;
-    };
+        return ingredientQuantity / 24 / duration;
+    }
 
     // Bolussperrzeit = 60 / Boli Pro Stunde
-    public static BigDecimal getBolusLock(){
-        BigDecimal oneHour = new BigDecimal(60);
-        BigDecimal boliPerHour = new BigDecimal(Data.getBoliPerHour());
-        BigDecimal bolusLock = oneHour.divide(boliPerHour,0,RoundingMode.HALF_UP);
+    public static int getBolusLock(){
+        int boliPerHour = Data.getBoliPerHour();
+        if (boliPerHour == 0) return 0;
 
-        return bolusLock;
-    };
+        return 60/boliPerHour;
+    }
 
     //Boli Pro Stunde = 60 / Bolussperrzeit
-    public static BigDecimal getBoliPerHour(){
-        BigDecimal oneHour = new BigDecimal(60);
-        BigDecimal bolusLock = new BigDecimal(Data.getBolusLock());
-        BigDecimal boliPerHour = oneHour.divide(bolusLock,0,RoundingMode.HALF_UP);
+    public static int getBoliPerHour(){
+        int bolusLock = Data.getBolusLock();
+        if (bolusLock == 0) return 0;
 
-        return boliPerHour;
-    };
+        return 60/bolusLock;
+    }
 
     // Minimale Laufzeit = Kassettenvolumen / ( Basalrate + ( Anzahl Boli pro Stunde * Wirkstoffmenge je Bolus ))
     /* public static BigDecimal getMinimumRuntime(BigDecimal bolusAmount, int bolusPerHour, BigDecimal basalRate, int tankVolume) {
