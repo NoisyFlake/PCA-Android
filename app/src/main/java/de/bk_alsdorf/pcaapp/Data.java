@@ -1,80 +1,47 @@
 package de.bk_alsdorf.pcaapp;
 
 public class Data {
-    private static String basalRate = "0"; // is also used as bolusAmount in mg
-    private static String basalRateDisplay = "0"; // rounded value of basalRate
-    private static String cartridge = "50";
-    private static String duration = "10";
-    private static String ingredientQuantity = "0";
-    private static String dosage = "0";
+    private static double basalRate                 = 0.0;
+    private static int cartridge                    = 50;
+    private static int duration                     = 10;
+    private static double ingredientQuantity        = 0.0;
+    private static double dosage                    = 0.0;
 
-    private static String bolusAmount = "0"; // ml ONLY
-    private static String bolusAmountDisplay = "0"; // rounded value of bolusAmount
-    private static String bolusUnit = "0";
-    private static String bolusLock = "0";
-    private static String boliPerHour = "0";
+    private static double bolusAmount               = 0.0;
+    private static boolean bolusUnit                = false;
+    private static int bolusLock                    = 0;
+    private static int boliPerHour                  = 0;
 
-    public static String getBasalRate()             { return basalRate; }
-    public static String getBasalRateDisplay()      { return basalRateDisplay; }
-    public static String getCartridge()             { return cartridge; }
-    public static String getDuration()              { return duration;  }
-    public static String getIngredientQuantity()    { return ingredientQuantity; }
-    public static String getDosage()                { return dosage; }
 
-    public static String getBolusAmount()           { return bolusAmount; }
-    public static String getBolusAmountDisplay()    { return bolusAmountDisplay; }
-    public static String getBolusUnit()             { return bolusUnit; }
-    public static String getBolusLock()             { return bolusLock; }
-    public static String getBoliPerHour()           { return boliPerHour; }
+    public static double getBasalRate()             { return basalRate; }
+    public static int getCartridge()                { return cartridge; }
+    public static int getDuration()                 { return duration;  }
+    public static double getIngredientQuantity()    { return ingredientQuantity; }
+    public static double getDosage()                { return dosage; }
 
-    public static void setBasalRate(String basalRate) {
-        if (basalRate.equals("")) basalRate = "0";
-        Data.basalRate = basalRate;
-    }
+    public static double getBolusAmount()           { return bolusAmount; }
+    public static boolean getBolusUnit()            { return bolusUnit; }
+    public static int getBolusLock()                { return bolusLock; }
+    public static int getBoliPerHour()              { return boliPerHour; }
 
-    public static void setBasalRateDisplay(String basalRateDisplay) {
-        if (basalRateDisplay.equals("")) basalRateDisplay = "0";
-        Data.basalRateDisplay = basalRateDisplay;
-    }
 
-    public static void setCartridge(String cartridge) {
+    public static void setBasalRate(double basalRate) { Data.basalRate = basalRate; }
+    public static void setCartridge(int cartridge) {
         Data.cartridge = cartridge;
     }
-
-    public static void setDuration(String duration) {
+    public static void setDuration(int duration) {
         Data.duration = duration;
     }
-
-    public static void setIngredientQuantity(String ingredientQuantity) {
-        if (ingredientQuantity.equals("")) ingredientQuantity = "0";
-        Data.ingredientQuantity = ingredientQuantity;
-    }
-
-    public static void setDosage(String dosage) {
+    public static void setIngredientQuantity(double ingredientQuantity) { Data.ingredientQuantity = ingredientQuantity; }
+    public static void setDosage(double dosage) {
         Data.dosage = dosage;
     }
 
-    public static void setBolusAmount(String bolusAmount) {
-        if (bolusAmount.equals("")) bolusAmount = "0";
-        Data.bolusAmount = bolusAmount;
-    }
-
-    public static void setBolusAmountDisplay(String bolusAmountDisplay) {
-        if (bolusAmountDisplay.equals("")) bolusAmountDisplay = "0";
-        Data.bolusAmountDisplay = bolusAmountDisplay;
-    }
-
-    public static void setBolusUnit(String bolusUnit) {
+    public static void setBolusAmount(double bolusAmount) { Data.bolusAmount = bolusAmount; }
+    public static void setBolusUnit(boolean bolusUnit) {
         Data.bolusUnit = bolusUnit;
     }
-
-    public static void setBolusLock(String bolusLock) {
-        if (bolusLock.equals("")) bolusLock = "0";
-        Data.bolusLock = bolusLock;
-    }
-
-    public static void setBoliPerHour(String boliPerHour) {
-        if (boliPerHour.equals("")) boliPerHour = "0";
-        Data.boliPerHour = boliPerHour;
+    public static void setBolusLock(int bolusLock) { Data.bolusLock = bolusLock; }
+    public static void setBoliPerHour(int boliPerHour) { Data.boliPerHour = boliPerHour;
     }
 }
