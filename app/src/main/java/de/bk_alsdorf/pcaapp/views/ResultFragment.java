@@ -63,45 +63,45 @@ public class ResultFragment extends Fragment {
     @Override
     public void setUserVisibleHint (boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) updateResults();
+        //if (isVisibleToUser) updateResults();
     }
 
-    public void updateResults() {
-        String basalRate = Data.getBasalRate() + " mg/h";
-        basalRateResult.setText(basalRate);
-
-        if (Data.getIngredientQuantity().length() > 0 && !Data.getIngredientQuantity().equals("0.0")) {
-            String ingredientQuantity = Data.getIngredientQuantity() + " mg";
-            ingredientQuantityResult.setText(ingredientQuantity);
-        }
-
-        String cartridge = Data.getCartridge() + " ml";
-        cartridgeResult.setText(cartridge);
-
-        String duration = Data.getDuration() + " Tage";
-        durationResult.setText(duration);
-
-        dosageResult.setText(Data.getDosage());
-
-        if(Data.getBolusUnit().equals("mg")) {
-            bolusAmountResult.setText(Data.getBasalRate() + " " + Data.getBolusUnit());
-        } else {
-            if (Data.getBolusAmount().length() > 0 && !Data.getBolusAmount().equals("0.0")) {
-                String bolusAmount = Data.getBolusAmount() + " " + Data.getBolusUnit();
-                bolusAmountResult.setText(bolusAmount);
-            }
-        }
-
-        if (Data.getBolusLock().length() > 0 && !Data.getBolusLock().equals("0.0")) {
-            String bolusLock = Data.getBolusLock() + " Minuten";
-            bolusLockResult.setText(bolusLock);
-        }
-
-        if (Data.getBoliPerHour().length() > 0 && !Data.getBoliPerHour().equals("0.0")) {
-            String boliPerHour = Data.getBoliPerHour() + " pro Stunde";
-            boliPerHourResult.setText(boliPerHour);
-        }
-    }
+//    public void updateResults() {
+//        String basalRate = Data.getBasalRate() + " mg/h";
+//        basalRateResult.setText(basalRate);
+//
+//        if (Data.getIngredientQuantity().length() > 0 && !Data.getIngredientQuantity().equals("0.0")) {
+//            String ingredientQuantity = Data.getIngredientQuantity() + " mg";
+//            ingredientQuantityResult.setText(ingredientQuantity);
+//        }
+//
+//        String cartridge = Data.getCartridge() + " ml";
+//        cartridgeResult.setText(cartridge);
+//
+//        String duration = Data.getDuration() + " Tage";
+//        durationResult.setText(duration);
+//
+//        dosageResult.setText(Data.getDosage());
+//
+//        if(Data.getBolusUnit().equals("mg")) {
+//            bolusAmountResult.setText(Data.getBasalRate() + " " + Data.getBolusUnit());
+//        } else {
+//            if (Data.getBolusAmount().length() > 0 && !Data.getBolusAmount().equals("0.0")) {
+//                String bolusAmount = Data.getBolusAmount() + " " + Data.getBolusUnit();
+//                bolusAmountResult.setText(bolusAmount);
+//            }
+//        }
+//
+//        if (Data.getBolusLock().length() > 0 && !Data.getBolusLock().equals("0.0")) {
+//            String bolusLock = Data.getBolusLock() + " Minuten";
+//            bolusLockResult.setText(bolusLock);
+//        }
+//
+//        if (Data.getBoliPerHour().length() > 0 && !Data.getBoliPerHour().equals("0.0")) {
+//            String boliPerHour = Data.getBoliPerHour() + " pro Stunde";
+//            boliPerHourResult.setText(boliPerHour);
+//        }
+//    }
 
     private View initializeResultView(LayoutInflater inflater, ViewGroup container) {
         final View resultView = inflater.inflate(R.layout.activity_result, container, false);
@@ -122,57 +122,57 @@ public class ResultFragment extends Fragment {
 
         resultDate.setText(date);
 
-        screenshotButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                storeScreenshot(getScreenShot(v));
-            }
-        });
+//        screenshotButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                storeScreenshot(getScreenShot(v));
+//            }
+//        });
 
         return resultView;
     }
 
-    private Bitmap getScreenShot(View view) {
-        View screenView = view.getRootView();
-        screenView.setDrawingCacheEnabled(true);
-        Bitmap bitmap = Bitmap.createBitmap(screenView.getDrawingCache());
-        screenView.setDrawingCacheEnabled(false);
-        return bitmap;
-    }
-
-    private void storeScreenshot(Bitmap bitmap){
-        Date now = new Date();
-        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
-        final File dirPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/DCIM/Screenshots/");
-        dirPath.mkdirs();
-        File imageFile = new File(dirPath, now + ".jpg");
-        try {
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
-            int quality = 100;
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-            outputStream.flush();
-            outputStream.close();
-            MainActivity.addImageToGallery(imageFile.getAbsolutePath());
-           //MediaStore.Images.Media.insertImage(getContentResolver(), imageFile, "Test", "TestDesc")
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        shareImage(imageFile);
-    }
-    private void shareImage(File file){
-        Uri uri = Uri.fromFile(file);
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        intent.setType("image/*");
-
-        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
-        intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        try {
-            startActivity(Intent.createChooser(intent, "Share Screenshot"));
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+//    private Bitmap getScreenShot(View view) {
+//        View screenView = view.getRootView();
+//        screenView.setDrawingCacheEnabled(true);
+//        Bitmap bitmap = Bitmap.createBitmap(screenView.getDrawingCache());
+//        screenView.setDrawingCacheEnabled(false);
+//        return bitmap;
+//    }
+//
+//    private void storeScreenshot(Bitmap bitmap){
+//        Date now = new Date();
+//        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+//        final File dirPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/DCIM/Screenshots/");
+//        dirPath.mkdirs();
+//        File imageFile = new File(dirPath, now + ".jpg");
+//        try {
+//            FileOutputStream outputStream = new FileOutputStream(imageFile);
+//            int quality = 100;
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+//            outputStream.flush();
+//            outputStream.close();
+//            MainActivity.addImageToGallery(imageFile.getAbsolutePath());
+//           //MediaStore.Images.Media.insertImage(getContentResolver(), imageFile, "Test", "TestDesc")
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        shareImage(imageFile);
+//    }
+//    private void shareImage(File file){
+//        Uri uri = Uri.fromFile(file);
+//        Intent intent = new Intent();
+//        intent.setAction(Intent.ACTION_SEND);
+//        intent.setType("image/*");
+//
+//        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+//        intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+//        intent.putExtra(Intent.EXTRA_STREAM, uri);
+//        try {
+//            startActivity(Intent.createChooser(intent, "Share Screenshot"));
+//        } catch (ActivityNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

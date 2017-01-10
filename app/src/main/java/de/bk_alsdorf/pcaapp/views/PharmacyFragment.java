@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class PharmacyFragment extends Fragment {
     private TextView durationSeekBarCurrentValue;
     private EditText ingredientQuantityInput;
     private TextView dosageResult;
-    private boolean updateInProgress = false;
+    private boolean init = false;
 
     public PharmacyFragment() {}
 
@@ -45,12 +46,8 @@ public class PharmacyFragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
-        if (isVisibleToUser) {
-            if(!updateInProgress) {
-                if(basalRateInput != null){
-                    basalRateInput.setText(Data.getBasalRateDisplay());
-                }
-            }
+        if (isVisibleToUser && init) {
+            updateData();
         }
     }
 
@@ -64,17 +61,25 @@ public class PharmacyFragment extends Fragment {
         ingredientQuantityInput = (EditText) pharmacyView.findViewById(R.id.ingredientQuantityInput);
         dosageResult = (TextView) pharmacyView.findViewById(R.id.dosageResult);
 
-        basalRateInput.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {}
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        basalRateInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    double basalRate = Double.parseDouble(basalRateInput.getText().toString());
+                    Data.setBasalRate(basalRate);
+                    updateData();
+                }
+            }
+        });
+
+        cartridgeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            public void onNothingSelected(AdapterView<?> arg0) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Data.setBasalRate(basalRateInput.getText().toString());
-                Data.setBasalRateDisplay(basalRateInput.getText().toString());
-                if (!updateInProgress) {
-                    updateIngredientQuantity();
-                }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                int cartridge = Integer.parseInt(cartridgeSpinner.getSelectedItem().toString());
+                Data.setCartridge(cartridge);
+                updateData();
             }
         });
 
@@ -84,58 +89,110 @@ public class PharmacyFragment extends Fragment {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Data.setDuration(String.valueOf(durationSeekBar.getProgress() + 1));
-                durationSeekBarCurrentValue.setText(String.valueOf(durationSeekBar.getProgress()+1));
-                updateIngredientQuantity();
+                int duration = progress + 1;
+                Data.setDuration(duration);
+                durationSeekBarCurrentValue.setText(String.valueOf(Data.getDuration()));
+                updateData();
             }
         });
 
-
-        cartridgeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-            public void onNothingSelected(AdapterView<?> arg0) {}
-
+        ingredientQuantityInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Data.setCartridge(cartridgeSpinner.getSelectedItem().toString());
-                updateDosage();
-            }
-        });
-
-
-        ingredientQuantityInput.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {}
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Data.setIngredientQuantity(ingredientQuantityInput.getText().toString());
-                if (!updateInProgress) {
-                    updateBasalRate();
-                    updateDosage();
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    double ingredientQuantity = Double.parseDouble(ingredientQuantityInput.getText().toString());
+                    Data.setIngredientQuantity(ingredientQuantity);
+                    updateData();
                 }
             }
         });
 
+
+
+//        basalRateInput.addTextChangedListener(new TextWatcher() {
+//            public void afterTextChanged(Editable s) {}
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                Data.setBasalRate(basalRateInput.getText().toString());
+//                Data.setBasalRateDisplay(basalRateInput.getText().toString());
+//                if (!updateInProgress) {
+//                    updateIngredientQuantity();
+//                }
+//            }
+//        });
+//
+//        durationSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            public void onStopTrackingTouch(SeekBar seekBar) {}
+//            public void onStartTrackingTouch(SeekBar seekBar) {}
+//
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                Data.setDuration(String.valueOf(durationSeekBar.getProgress() + 1));
+//                durationSeekBarCurrentValue.setText(String.valueOf(durationSeekBar.getProgress()+1));
+//                updateIngredientQuantity();
+//            }
+//        });
+//
+//
+//        cartridgeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+//            public void onNothingSelected(AdapterView<?> arg0) {}
+//
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Data.setCartridge(cartridgeSpinner.getSelectedItem().toString());
+//                updateDosage();
+//            }
+//        });
+//
+//
+//        ingredientQuantityInput.addTextChangedListener(new TextWatcher() {
+//            public void afterTextChanged(Editable s) {}
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                Data.setIngredientQuantity(ingredientQuantityInput.getText().toString());
+//                if (!updateInProgress) {
+//                    updateBasalRate();
+//                    updateDosage();
+//                }
+//            }
+//        });
+        init = true;
         return pharmacyView;
     }
 
-    private void updateIngredientQuantity() {
-        updateInProgress = true;
-        Data.setIngredientQuantity(Calculation.getIngredientQuantity().toString());
-        ingredientQuantityInput.setText(Data.getIngredientQuantity());
-        updateDosage();
-        updateInProgress = false;
+    private void updateData() {
+        // Don't fill the fields if value is zero or less (except dosage)
+        String basalRate = Data.getBasalRate() > 0 ? String.valueOf(Data.getBasalRate()) : "";
+        String ingredientQuantity = Data.getIngredientQuantity() > 0 ? String.valueOf(Data.getIngredientQuantity()) : "";
+
+        String dosage = String.valueOf(Data.getDosage());
+
+        basalRateInput.setText(basalRate);
+        ingredientQuantityInput.setText(ingredientQuantity);
+        dosageResult.setText(dosage);
     }
 
-    private void updateDosage() {
-        Data.setDosage(Calculation.getDosage().toString());
-        dosageResult.setText(Data.getDosage());
-    }
-
-    private void updateBasalRate() {
-        updateInProgress = true;
-        Data.setBasalRate(Calculation.getBasalRate().toString());
-        basalRateInput.setText(Data.getBasalRate());
-        updateInProgress = false;
-    }
+//    private void updateIngredientQuantity() {
+//        updateInProgress = true;
+//        Data.setIngredientQuantity(Calculation.getIngredientQuantity().toString());
+//        ingredientQuantityInput.setText(Data.getIngredientQuantity());
+//        updateDosage();
+//        updateInProgress = false;
+//    }
+//
+//    private void updateDosage() {
+//        Data.setDosage(Calculation.getDosage().toString());
+//        dosageResult.setText(Data.getDosage());
+//    }
+//
+//    private void updateBasalRate() {
+//        updateInProgress = true;
+//        Data.setBasalRate(Calculation.getBasalRate().toString());
+//        basalRateInput.setText(Data.getBasalRate());
+//        updateInProgress = false;
+//    }
 }

@@ -45,10 +45,7 @@ public class PumpFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser) {
-            if (!updateInProgress) {
-                updateBolusAmountInputByBolusUnit();
-                dosageResult.setText(Data.getDosage());
-            }
+
         }
     }
 
@@ -61,101 +58,101 @@ public class PumpFragment extends Fragment {
         bolusLockTimeInput = (EditText) pumpView.findViewById(R.id.bolusLockInput);
         dosageResult = (TextView) pumpView.findViewById(R.id.dosageResult);
 
-        bolusAmountInput.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {}
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(Data.getBolusUnit().equals("mg")) {
-                    Data.setBasalRate(bolusAmountInput.getText().toString());
-                } else {
-
-                    if (!updateInProgress) {
-                        Data.setBolusAmount(bolusAmountInput.getText().toString());
-                        Data.setBolusAmountDisplay(bolusAmountInput.getText().toString());
-                    }
-                    Data.setBasalRate(Calculation.convertBolusAmountMlToMg().toString());
-                    Data.setBasalRateDisplay(Calculation.convertBolusAmountMlToMg().setScale(1, BigDecimal.ROUND_HALF_UP).toString());
-                }
-            }
-        });
-
-
-        bolusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onNothingSelected(AdapterView<?> arg0) { }
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Data.setBolusUnit(bolusSpinner.getSelectedItem().toString());
-                updateBolusAmountInputByBolusUnit();
-            }
-        });
-
-        boliPerHourInput.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {}
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Data.setBoliPerHour(boliPerHourInput.getText().toString());
-                if (!updateInProgress) {
-                    updateBolusLock();
-                }
-            }
-        });
-
-        bolusLockTimeInput.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {}
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Data.setBolusLock(bolusLockTimeInput.getText().toString());
-                if (!updateInProgress) {
-                    updateBoliPerHour();
-                }
-            }
-        });
+//        bolusAmountInput.addTextChangedListener(new TextWatcher() {
+//            public void afterTextChanged(Editable s) {}
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                if(Data.getBolusUnit().equals("mg")) {
+//                    Data.setBasalRate(bolusAmountInput.getText().toString());
+//                } else {
+//
+//                    if (!updateInProgress) {
+//                        Data.setBolusAmount(bolusAmountInput.getText().toString());
+//                        Data.setBolusAmountDisplay(bolusAmountInput.getText().toString());
+//                    }
+//                    Data.setBasalRate(Calculation.convertBolusAmountMlToMg().toString());
+//                    Data.setBasalRateDisplay(Calculation.convertBolusAmountMlToMg().setScale(1, BigDecimal.ROUND_HALF_UP).toString());
+//                }
+//            }
+//        });
+//
+//
+//        bolusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            public void onNothingSelected(AdapterView<?> arg0) { }
+//
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Data.setBolusUnit(bolusSpinner.getSelectedItem().toString());
+//                updateBolusAmountInputByBolusUnit();
+//            }
+//        });
+//
+//        boliPerHourInput.addTextChangedListener(new TextWatcher() {
+//            public void afterTextChanged(Editable s) {}
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                Data.setBoliPerHour(boliPerHourInput.getText().toString());
+//                if (!updateInProgress) {
+//                    updateBolusLock();
+//                }
+//            }
+//        });
+//
+//        bolusLockTimeInput.addTextChangedListener(new TextWatcher() {
+//            public void afterTextChanged(Editable s) {}
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                Data.setBolusLock(bolusLockTimeInput.getText().toString());
+//                if (!updateInProgress) {
+//                    updateBoliPerHour();
+//                }
+//            }
+//        });
 
         return pumpView;
 
     }
 
     //Update bolus amount depending on unit
-    private void updateBolusAmountInputByBolusUnit() {
-        updateInProgress = true;
-
-        if(Data.getBolusUnit().equals("mg")) {
-            bolusAmountInput.setText(Data.getBasalRateDisplay());
-        } else {
-            BigDecimal bolusAmount = Calculation.convertBolusAmountMgToMl();
-            Data.setBolusAmount(bolusAmount.toString());
-            Data.setBolusAmountDisplay(bolusAmount.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
-            bolusAmountInput.setText(Data.getBolusAmountDisplay());
-        }
-
-        updateInProgress = false;
-    }
-
-    private void updateBolusLock(){
-        updateInProgress = true;
-
-        if (boliPerHourInput.getText().length() > 0) {
-            bolusLockTimeInput.setText(Calculation.getBolusLock().toString());
-        }
-
-        updateInProgress = false;
-    }
-
-    private void updateBoliPerHour(){
-        updateInProgress = true;
-
-        if (bolusLockTimeInput.getText().length() > 0){
-            boliPerHourInput.setText(Calculation.getBoliPerHour().toString());
-        }
-
-        updateInProgress = false;
-    }
+//    private void updateBolusAmountInputByBolusUnit() {
+//        updateInProgress = true;
+//
+//        if(Data.getBolusUnit().equals("mg")) {
+//            bolusAmountInput.setText(Data.getBasalRateDisplay());
+//        } else {
+//            BigDecimal bolusAmount = Calculation.convertBolusAmountMgToMl();
+//            Data.setBolusAmount(bolusAmount.toString());
+//            Data.setBolusAmountDisplay(bolusAmount.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
+//            bolusAmountInput.setText(Data.getBolusAmountDisplay());
+//        }
+//
+//        updateInProgress = false;
+//    }
+//
+//    private void updateBolusLock(){
+//        updateInProgress = true;
+//
+//        if (boliPerHourInput.getText().length() > 0) {
+//            bolusLockTimeInput.setText(Calculation.getBolusLock().toString());
+//        }
+//
+//        updateInProgress = false;
+//    }
+//
+//    private void updateBoliPerHour(){
+//        updateInProgress = true;
+//
+//        if (bolusLockTimeInput.getText().length() > 0){
+//            boliPerHourInput.setText(Calculation.getBoliPerHour().toString());
+//        }
+//
+//        updateInProgress = false;
+//    }
 }

@@ -1,8 +1,5 @@
 package de.bk_alsdorf.pcaapp;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 public class Calculation {
 
     // Wirkstoffmenge = Basalrate in mg/h * 24 * Laufzeit in Tagen
