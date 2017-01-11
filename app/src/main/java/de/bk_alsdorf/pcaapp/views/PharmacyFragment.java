@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import de.bk_alsdorf.pcaapp.Data;
@@ -27,8 +29,6 @@ public class PharmacyFragment extends Fragment {
     private EditText ingredientQuantityInput;
     private TextView dosageResult;
     private boolean init = false;
-
-    public PharmacyFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,20 +59,20 @@ public class PharmacyFragment extends Fragment {
         ingredientQuantityInput = (EditText) pharmacyView.findViewById(R.id.ingredientQuantityInput);
         dosageResult = (TextView) pharmacyView.findViewById(R.id.dosageResult);
 
-        basalRateInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        basalRateInput.setOnEditorActionListener(new OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                double basalRate;
-                try {
-                    basalRate = Double.parseDouble(v.getText().toString());
-                } catch(NumberFormatException e) {
-                    basalRate = 0;
-                }
+            double basalRate;
+            try {
+                basalRate = Double.parseDouble(v.getText().toString());
+            } catch(NumberFormatException e) {
+                basalRate = 0;
+            }
 
-                Data.setBasalRate(basalRate);
-                updateData();
+            Data.setBasalRate(basalRate);
+            updateData();
 
-                return false;
+            return false;
             }
         });
 
@@ -98,7 +98,7 @@ public class PharmacyFragment extends Fragment {
             }
         });
 
-        durationSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        durationSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             public void onStopTrackingTouch(SeekBar seekBar) {}
             public void onStartTrackingTouch(SeekBar seekBar) {}
 
@@ -110,7 +110,7 @@ public class PharmacyFragment extends Fragment {
             }
         });
 
-        ingredientQuantityInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        ingredientQuantityInput.setOnEditorActionListener(new OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 double ingredientQuantity;

@@ -37,8 +37,6 @@ public class ResultFragment extends Fragment {
     private TextView boliPerHourResult;
     private Button screenshotButton;
 
-    public ResultFragment() {}
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
