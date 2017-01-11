@@ -18,24 +18,6 @@ public class Calculation {
         return ingredientQuantity / cartridge;
     }
 
-    //Bolusmenge in ml = Basalrate * (1/Wirkstoffkonzentration)
-    public static double convertBolusAmountMgToMl() {
-        double basalRate = Data.getBasalRate();
-        double dosage = Data.getDosage();
-
-        if(dosage == 0) return 0;
-
-        return basalRate * (1/dosage);
-    }
-
-    //Bolusmenge in mg = Bolusmenge in ml * Konzentration
-    public static double convertBolusAmountMlToMg() {
-        double bolusAmount = Data.getBolusAmount();
-        double dosage = Data.getDosage();
-
-        return bolusAmount * dosage;
-    }
-
     // Basalrate in mg/h = Wirkstoffmenge / 24 / laufzeit
     public static double getBasalRate(){
         double ingredientQuantity = Data.getIngredientQuantity();
@@ -52,7 +34,7 @@ public class Calculation {
         return 60/boliPerHour;
     }
 
-    //Boli Pro Stunde = 60 / Bolussperrzeit
+    // Boli Pro Stunde = 60 / Bolussperrzeit
     public static int getBoliPerHour(){
         int bolusLock = Data.getBolusLock();
         if (bolusLock == 0) return 0;
@@ -68,5 +50,21 @@ public class Calculation {
         if (maxAgentPerHour.compareTo(new BigDecimal(0)) == 0) return new BigDecimal(0);
         return new BigDecimal(tankVolume).divide(maxAgentPerHour, 1, RoundingMode.HALF_UP);
     } */
+
+    //Basalrate in ml = Basalrate * (1 / Wirkstoffkonzentration)
+    public static double convertMgToMl(double mg) {
+        double dosage = Data.getDosage();
+        if(dosage == 0) return 0;
+
+        return mg * (1/dosage);
+    }
+
+    //Basalrate in mg = Basalrate in ml * Wirkstoffkonzentration
+    public static double convertMlToMg(double ml) {
+        double dosage = Data.getDosage();
+        if(dosage == 0) return 0;
+
+        return ml * dosage;
+    }
 
 }

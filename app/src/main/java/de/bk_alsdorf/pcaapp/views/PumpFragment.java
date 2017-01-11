@@ -1,34 +1,33 @@
 package de.bk_alsdorf.pcaapp.views;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import java.math.BigDecimal;
+import android.widget.TextView.OnEditorActionListener;
 
 import de.bk_alsdorf.pcaapp.Calculation;
 import de.bk_alsdorf.pcaapp.Data;
 import de.bk_alsdorf.pcaapp.R;
 
-import static de.bk_alsdorf.pcaapp.Data.setBolusAmount;
-
 public class PumpFragment extends Fragment {
-    private EditText bolusAmountInput;
-    private Spinner bolusSpinner;
-    private EditText bolusLockTimeInput;
-    private boolean updateInProgress;
+    private TextView basalRateValue;
+    private Spinner basalRateUnitSpinner;
+    private EditText bolusInput;
+    private Spinner bolusUnitSpinner;
+    private EditText bolusLockInput;
     private EditText boliPerHourInput;
     private TextView dosageResult;
-
-    public PumpFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,114 +44,170 @@ public class PumpFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
 
         if (isVisibleToUser) {
-
+            updateData();
         }
     }
 
     private View initializePumpView(LayoutInflater inflater, ViewGroup container) {
         final View pumpView = inflater.inflate(R.layout.activity_pump, container, false);
 
-        bolusAmountInput = (EditText) pumpView.findViewById(R.id.bolusAmountInput);
-        bolusSpinner = (Spinner) pumpView.findViewById(R.id.bolusSpinner);
+        basalRateValue = (TextView) pumpView.findViewById(R.id.basalRateValue);
+        basalRateUnitSpinner = (Spinner) pumpView.findViewById(R.id.basalRateSpinner);
+        bolusInput = (EditText) pumpView.findViewById(R.id.bolusInput);
+        bolusUnitSpinner = (Spinner) pumpView.findViewById(R.id.bolusSpinner);
         boliPerHourInput = (EditText) pumpView.findViewById(R.id.boliPerHourInput);
-        bolusLockTimeInput = (EditText) pumpView.findViewById(R.id.bolusLockInput);
+        bolusLockInput = (EditText) pumpView.findViewById(R.id.bolusLockInput);
         dosageResult = (TextView) pumpView.findViewById(R.id.dosageResult);
 
-//        bolusAmountInput.addTextChangedListener(new TextWatcher() {
-//            public void afterTextChanged(Editable s) {}
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                if(Data.getBolusUnit().equals("mg")) {
-//                    Data.setBasalRate(bolusAmountInput.getText().toString());
-//                } else {
-//
-//                    if (!updateInProgress) {
-//                        Data.setBolusAmount(bolusAmountInput.getText().toString());
-//                        Data.setBolusAmountDisplay(bolusAmountInput.getText().toString());
-//                    }
-//                    Data.setBasalRate(Calculation.convertBolusAmountMlToMg().toString());
-//                    Data.setBasalRateDisplay(Calculation.convertBolusAmountMlToMg().setScale(1, BigDecimal.ROUND_HALF_UP).toString());
-//                }
-//            }
-//        });
-//
-//
-//        bolusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            public void onNothingSelected(AdapterView<?> arg0) { }
-//
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Data.setBolusUnit(bolusSpinner.getSelectedItem().toString());
-//                updateBolusAmountInputByBolusUnit();
-//            }
-//        });
-//
-//        boliPerHourInput.addTextChangedListener(new TextWatcher() {
-//            public void afterTextChanged(Editable s) {}
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                Data.setBoliPerHour(boliPerHourInput.getText().toString());
-//                if (!updateInProgress) {
-//                    updateBolusLock();
-//                }
-//            }
-//        });
-//
-//        bolusLockTimeInput.addTextChangedListener(new TextWatcher() {
-//            public void afterTextChanged(Editable s) {}
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                Data.setBolusLock(bolusLockTimeInput.getText().toString());
-//                if (!updateInProgress) {
-//                    updateBoliPerHour();
-//                }
-//            }
-//        });
+        bolusUnitSpinner.setSelection(1);
+
+        basalRateUnitSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+           @Override
+           public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+               String unit = parent.getSelectedItem().toString();
+               boolean isBasalRateInMl = unit.equals("ml") ? true : false;
+               Data.setIsBasalRateInMl(isBasalRateInMl);
+               updateData();
+           }
+
+           public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        bolusInput.setOnEditorActionListener(new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                double bolusAmount;
+                try {
+                    bolusAmount = Double.parseDouble(v.getText().toString());
+                } catch(NumberFormatException e) {
+                    bolusAmount = 0;
+                }
+
+                if (Data.isBolusAmountInMl()) {
+                    bolusAmount = Calculation.convertMlToMg(bolusAmount);
+                }
+
+                Data.setBolusAmount(bolusAmount);
+                updateData();
+
+                return false;
+            }
+        });
+
+        bolusInput.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                bolusInput.setTextColor(Color.RED);
+            }
+        });
+
+        bolusUnitSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String unit = parent.getSelectedItem().toString();
+                boolean isBolusAmountInMl = unit.equals("ml") ? true : false;
+                Data.setIsBolusAmountInMl(isBolusAmountInMl);
+                updateData();
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        bolusLockInput.setOnEditorActionListener(new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                int bolusLock;
+                try {
+                    bolusLock = Integer.parseInt(v.getText().toString());
+                } catch(NumberFormatException e) {
+                    bolusLock = 0;
+                }
+
+                Data.setBolusLock(bolusLock);
+                updateData();
+
+                return false;
+            }
+        });
+
+        bolusLockInput.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                bolusLockInput.setTextColor(Color.RED);
+                boliPerHourInput.setTextColor(Color.GRAY);
+            }
+        });
+
+        boliPerHourInput.setOnEditorActionListener(new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                int boliPerHour;
+                try {
+                    boliPerHour = Integer.parseInt(v.getText().toString());
+                } catch(NumberFormatException e) {
+                    boliPerHour = 0;
+                }
+
+                Data.setBoliPerHour(boliPerHour);
+                updateData();
+
+                return false;
+            }
+        });
+
+        boliPerHourInput.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                boliPerHourInput.setTextColor(Color.RED);
+                bolusLockInput.setTextColor(Color.GRAY);
+            }
+        });
 
         return pumpView;
-
     }
 
-    //Update bolus amount depending on unit
-//    private void updateBolusAmountInputByBolusUnit() {
-//        updateInProgress = true;
-//
-//        if(Data.getBolusUnit().equals("mg")) {
-//            bolusAmountInput.setText(Data.getBasalRateDisplay());
-//        } else {
-//            BigDecimal bolusAmount = Calculation.convertBolusAmountMgToMl();
-//            Data.setBolusAmount(bolusAmount.toString());
-//            Data.setBolusAmountDisplay(bolusAmount.setScale(1, BigDecimal.ROUND_HALF_UP).toString());
-//            bolusAmountInput.setText(Data.getBolusAmountDisplay());
-//        }
-//
-//        updateInProgress = false;
-//    }
-//
-//    private void updateBolusLock(){
-//        updateInProgress = true;
-//
-//        if (boliPerHourInput.getText().length() > 0) {
-//            bolusLockTimeInput.setText(Calculation.getBolusLock().toString());
-//        }
-//
-//        updateInProgress = false;
-//    }
-//
-//    private void updateBoliPerHour(){
-//        updateInProgress = true;
-//
-//        if (bolusLockTimeInput.getText().length() > 0){
-//            boliPerHourInput.setText(Calculation.getBoliPerHour().toString());
-//        }
-//
-//        updateInProgress = false;
-//    }
+    private void updateData() {
+        String basalRate = "0";
+        if (Data.getBasalRate() > 0) {
+            if (Data.isBasalRateInMl()) {
+                basalRate = String.valueOf(Data.getBasalRateInMl());
+            } else {
+                basalRate = String.valueOf(Data.getBasalRate());
+            }
+        }
+        basalRateValue.setText(basalRate);
+
+        String bolusAmount = "";
+        if (Data.getBolusAmount() > 0) {
+            if (Data.isBolusAmountInMl()) {
+                bolusAmount = String.valueOf(Data.getBolusAmountInMl());
+            } else {
+                bolusAmount = String.valueOf(Data.getBolusAmount());
+            }
+        }
+        bolusInput.setText(bolusAmount);
+
+        String bolusLock = Data.getBolusLock() > 0 ? String.valueOf(Data.getBolusLock()) : "";
+        bolusLockInput.setText(bolusLock);
+
+        String boliPerHour = Data.getBoliPerHour() > 0 ? String.valueOf(Data.getBoliPerHour()) : "";
+        boliPerHourInput.setText(boliPerHour);
+
+        String dosage = String.valueOf(Data.getDosage());
+        dosageResult.setText(dosage);
+
+        bolusInput.setTextColor(Color.BLACK);
+        bolusLockInput.setTextColor(Color.BLACK);
+        boliPerHourInput.setTextColor(Color.BLACK);
+    }
+
 }

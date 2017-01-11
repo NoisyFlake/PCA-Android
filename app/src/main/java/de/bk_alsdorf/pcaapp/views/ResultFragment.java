@@ -97,6 +97,15 @@ public class ResultFragment extends Fragment {
         String duration = Data.getDuration() + " Tage";
         durationResult.setText(duration);
 
+        String bolusAmount = (Data.getBolusAmount() > 0) ? (Data.getBolusAmount() + " mg") : noValue;
+        bolusAmountResult.setText(bolusAmount);
+
+        String bolusLock = (Data.getBolusLock() > 0) ? (Data.getBolusLock() + " Minuten") : noValue;
+        bolusLockResult.setText(bolusLock);
+
+        String boliPerHour = (Data.getBoliPerHour() > 0) ? String.valueOf(Data.getBoliPerHour()) : noValue;
+        boliPerHourResult.setText(boliPerHour);
+
         String dosage = String.valueOf(Data.getDosage());
         dosageResult.setText(dosage);
     }

@@ -29,6 +29,43 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/basalRateLabel"
+                android:layout_width="179dp"
+                android:layout_height="wrap_content"
+                android:text="@string/label_basal_rate_pump"
+                android:layout_marginBottom="10sp"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/basalRateValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.2"
+                    android:textSize="20sp"
+                    android:layout_weight="0.95" />
+
+                <Spinner
+                    android:id="@+id/basalRateSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/array_unit_volume" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15sp"
+            android:orientation="vertical">
+
+            <TextView
                 android:id="@+id/bolusAmountLabel"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
@@ -38,22 +75,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="1">
 
                 <EditText
-                    android:id="@+id/bolusAmountInput"
+                    android:id="@+id/bolusInput"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="numberDecimal"
-                    android:hint="@string/label_number_hint" />
+                    android:maxLength="10"
+                    android:layout_weight="0.70" />
 
                 <Spinner
                     android:id="@+id/bolusSpinner"
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:entries="@array/array_unit_volume"
-                    android:spinnerMode="dropdown" />
+                    android:entries="@array/array_unit_volume" />
 
             </LinearLayout>
         </LinearLayout>
@@ -65,7 +103,7 @@
 
             <TextView
                 android:id="@+id/bolusLockLabel"
-                android:layout_width="140dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:text="@string/label_bolus_lock"
                 android:textSize="14sp" />
@@ -76,7 +114,6 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="number"
-                android:hint="60"
                 android:maxLength="2" />
         </LinearLayout>
 
@@ -98,7 +135,6 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="number"
-                android:hint="1"
                 android:maxLength="2" />
         </LinearLayout>
     </LinearLayout>

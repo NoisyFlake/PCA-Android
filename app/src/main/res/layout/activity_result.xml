@@ -161,7 +161,7 @@
                 android:id="@+id/bolusLockResultLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/label_bolus_lock"
+                android:text="@string/result_bolus_lock"
                 android:layout_marginRight="@dimen/margin_md" />
 
             <TextView
