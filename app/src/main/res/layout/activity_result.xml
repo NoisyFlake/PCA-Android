@@ -27,7 +27,7 @@
                 android:textSize="@dimen/font_size_l" />
             <Button
                 android:id="@+id/screenshotBtn"
-                android:background="@drawable/instagram_logo"
+                android:background="@drawable/camera"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_marginLeft="12dp" />
