@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.MediaStore;

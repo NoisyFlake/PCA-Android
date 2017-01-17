@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -148,6 +149,7 @@ public class ResultFragment extends Fragment {
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         try {
             startActivity(Intent.createChooser(intent, "Share Screenshot"));
+            Toast.makeText(getActivity(), getString(R.string.screenshot_was_saved), Toast.LENGTH_SHORT).show();
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
         }

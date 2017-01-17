@@ -33,6 +33,8 @@
     <string name="title_pump">Pumpeneinstellungen</string>
     <string name="title_result">Schmerzmittelversorgung</string>
 
+    <string name="screenshot_was_saved">Das Bild wurde gespeichert.</string>
+
     <string-array name="array_volume_cartridge">
         <item>50</item>
         <item>100</item>
