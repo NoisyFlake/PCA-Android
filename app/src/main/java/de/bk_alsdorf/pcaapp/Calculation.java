@@ -52,12 +52,12 @@ public class Calculation {
         double basalRate = Data.getBasalRate();
         int tankVolume = Data.getCartridge();
 
-        double maxBoliAgentPerHour = bolusAmount * bolusPerHour;
-        double maxAgentPerHour = basalRate + maxBoliAgentPerHour;
 
-        if (maxAgentPerHour == 0)return 0;
+        if (bolusAmount <= 0 || bolusPerHour <= 0 || basalRate <= 0 || tankVolume <= 0) return 0;
 
-        return tankVolume/maxAgentPerHour;
+        double maxAgentPerHour = tankVolume / (basalRate + (bolusPerHour * bolusAmount));
+
+        return maxAgentPerHour;
     }
 
     //Basalrate in ml = Basalrate * (1 / Wirkstoffkonzentration)
