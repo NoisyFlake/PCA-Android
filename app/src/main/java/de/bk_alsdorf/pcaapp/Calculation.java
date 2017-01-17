@@ -51,9 +51,10 @@ public class Calculation {
         int bolusPerHour = Data.getBoliPerHour();
         double basalRate = Data.getBasalRate();
         int tankVolume = Data.getCartridge();
+        int normalRuntime = Data.getDuration();
 
-
-        if (bolusAmount <= 0 || bolusPerHour <= 0 || basalRate <= 0 || tankVolume <= 0) return 0;
+        if (bolusAmount <= 0 || bolusPerHour <= 0) return normalRuntime;
+        if (basalRate <= 0 || tankVolume <= 0) return 0;
 
         double maxAgentPerHour = tankVolume / (basalRate + (bolusPerHour * bolusAmount));
 
