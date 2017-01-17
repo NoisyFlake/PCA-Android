@@ -6,7 +6,7 @@ public class Data {
 
     // ===== PHARMACY INITIAL VALUES ===== //
     private static double basalRate                     = 0.0;
-    private static int cartridge                        = 50;
+    private static int cartridge                        = 0;
     private static int duration                         = 10;
     private static double ingredientQuantity            = 0.0;
     private static double dosage                        = 0.0;

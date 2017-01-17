@@ -59,11 +59,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/label_cartridge" />
 
-            <Spinner
-                android:id="@+id/cartridgeSpinner"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:entries="@array/array_volume_cartridge" />
+            <EditText
+                android:id="@+id/cartridgeInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:maxLength="10"
+                android:imeOptions="actionDone"
+                android:inputType="number" />
         </LinearLayout>
 
         <LinearLayout

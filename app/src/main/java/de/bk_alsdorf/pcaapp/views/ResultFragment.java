@@ -93,7 +93,7 @@ public class ResultFragment extends Fragment {
         String ingredientQuantity = (Data.getIngredientQuantity() > 0) ? (Data.getIngredientQuantity() + " mg") : noValue;
         ingredientQuantityResult.setText(ingredientQuantity);
 
-        String cartridge = Data.getCartridge() + " ml";
+        String cartridge = (Data.getCartridge() > 0) ? (Data.getCartridge() + " ml") : noValue;
         cartridgeResult.setText(cartridge);
 
         String duration = Data.getDuration() + " Tage";

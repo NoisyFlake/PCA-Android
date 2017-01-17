@@ -15,6 +15,8 @@ public class Calculation {
         double ingredientQuantity = Data.getIngredientQuantity();
         int cartridge = Data.getCartridge();
 
+        if (cartridge <= 0) return 0;
+
         return ingredientQuantity / cartridge;
     }
 
