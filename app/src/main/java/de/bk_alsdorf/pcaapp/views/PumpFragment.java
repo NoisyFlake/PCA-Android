@@ -27,6 +27,7 @@ public class PumpFragment extends Fragment {
     private Spinner bolusUnitSpinner;
     private EditText bolusLockInput;
     private EditText boliPerHourInput;
+    private EditText ingredientQuantityPerDayInput;
     private TextView dosageResult;
     private TextView minimalRuntime;
 
@@ -58,6 +59,7 @@ public class PumpFragment extends Fragment {
         bolusUnitSpinner = (Spinner) pumpView.findViewById(R.id.bolusSpinner);
         boliPerHourInput = (EditText) pumpView.findViewById(R.id.boliPerHourInput);
         bolusLockInput = (EditText) pumpView.findViewById(R.id.bolusLockInput);
+        ingredientQuantityPerDayInput = (EditText) pumpView.findViewById(R.id.ingredientQuantityPerDayInput);
         dosageResult = (TextView) pumpView.findViewById(R.id.dosageResult);
         minimalRuntime = (TextView) pumpView.findViewById(R.id.minimalRuntimeValue);
 
@@ -174,6 +176,33 @@ public class PumpFragment extends Fragment {
             }
         });
 
+        ingredientQuantityPerDayInput.setOnEditorActionListener(new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                double ingredientQuantityPerDay;
+                try {
+                    ingredientQuantityPerDay = Double.parseDouble(v.getText().toString());
+                } catch(NumberFormatException e) {
+                    ingredientQuantityPerDay = 0;
+                }
+
+                Data.setIngredientQuantityPerDay(ingredientQuantityPerDay);
+                updateData();
+
+                return false;
+            }
+        });
+
+        ingredientQuantityPerDayInput.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                ingredientQuantityPerDayInput.setTextColor(Color.RED);
+            }
+        });
+
         return pumpView;
     }
 
@@ -204,6 +233,9 @@ public class PumpFragment extends Fragment {
         String boliPerHour = Data.getBoliPerHour() > 0 ? String.valueOf(Data.getBoliPerHour()) : "";
         boliPerHourInput.setText(boliPerHour);
 
+        String ingredientQuantityPerDay = Data.getIngredientQuantityPerDay() > 0 ? String.valueOf(Data.getIngredientQuantityPerDay()) : "";
+        ingredientQuantityPerDayInput.setText(ingredientQuantityPerDay);
+
         String dosage = String.valueOf(Data.getDosage());
         dosageResult.setText(dosage);
 
@@ -212,6 +244,7 @@ public class PumpFragment extends Fragment {
         bolusInput.setTextColor(Color.BLACK);
         bolusLockInput.setTextColor(Color.BLACK);
         boliPerHourInput.setTextColor(Color.BLACK);
+        ingredientQuantityPerDayInput.setTextColor(Color.BLACK);
     }
 
 }

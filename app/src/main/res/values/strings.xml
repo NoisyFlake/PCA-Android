@@ -15,6 +15,7 @@
     <string name="label_dosage">Wirkstoffkonzentration</string>
     <string name="label_duration">Laufzeit in Tagen</string>
     <string name="label_ingredient_quantity">Wirkstoffmenge in mg / Beladung</string>
+    <string name="label_ingredient_quantity_per_day">Wirkstoffmenge pro Tag in mg</string>
     <string name="label_number_hint">0</string>
     <string name="label_pump_activity">Pumpeneinstellungen</string>
 

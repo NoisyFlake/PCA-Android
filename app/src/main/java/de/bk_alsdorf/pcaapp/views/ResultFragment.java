@@ -65,6 +65,7 @@ public class ResultFragment extends Fragment {
         bolusAmountResult = (TextView) resultView.findViewById(R.id.bolusAmountResult);
         bolusLockResult = (TextView) resultView.findViewById(R.id.bolusLockResult);
         boliPerHourResult = (TextView) resultView.findViewById(R.id.boliPerHourResult);
+
         screenshotButton = (Button) resultView.findViewById(R.id.screenshotBtn);
 
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
@@ -85,7 +86,7 @@ public class ResultFragment extends Fragment {
     private void updateResults() {
         String noValue = "Keine Angabe";
 
-        String basalRate = (Data.getBasalRate() > 0) ? (Data.getBasalRate() + " mg/h") : noValue;
+        String basalRate = (Data.getBasalRate() > 0) ? (Data.getBasalRate() + " mg/h    |    " + Data.getBasalRateInMl() + " ml/h    |    " + Data.getIngredientQuantityPerDay() + " mg/d" ) : noValue;
         basalRateResult.setText(basalRate);
 
         String ingredientQuantity = (Data.getIngredientQuantity() > 0) ? (Data.getIngredientQuantity() + " mg") : noValue;
