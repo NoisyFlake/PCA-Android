@@ -28,6 +28,7 @@ public class PumpFragment extends Fragment {
     private EditText bolusLockInput;
     private EditText boliPerHourInput;
     private TextView dosageResult;
+    private TextView minimalRuntime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class PumpFragment extends Fragment {
         boliPerHourInput = (EditText) pumpView.findViewById(R.id.boliPerHourInput);
         bolusLockInput = (EditText) pumpView.findViewById(R.id.bolusLockInput);
         dosageResult = (TextView) pumpView.findViewById(R.id.dosageResult);
+        minimalRuntime = (TextView) pumpView.findViewById(R.id.minimalRuntimeValue);
 
         bolusUnitSpinner.setSelection(1);
 
@@ -205,6 +207,8 @@ public class PumpFragment extends Fragment {
         String dosage = String.valueOf(Data.getDosage());
         dosageResult.setText(dosage);
 
+        String minRuntime = String.valueOf(Data.getMinimalRuntime());
+        minimalRuntime.setText(minRuntime);
         bolusInput.setTextColor(Color.BLACK);
         bolusLockInput.setTextColor(Color.BLACK);
         boliPerHourInput.setTextColor(Color.BLACK);

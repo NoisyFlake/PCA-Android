@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/textView"
@@ -136,7 +137,21 @@
                 android:ems="10"
                 android:inputType="number"
                 android:maxLength="2" />
+
         </LinearLayout>
+
+        <TextView
+            android:text="@string/label_min_runtime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/minimalRuntimeLabel" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/minimalRuntimeValue"
+            android:layout_weight="0.09"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <!--Footer for dosage information-->

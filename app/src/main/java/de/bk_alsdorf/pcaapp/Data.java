@@ -19,6 +19,7 @@ public class Data {
     private static int boliPerHour                  = 0;
 
 
+
     // ===== PHARMACY GETTERS ===== //
     public static double getBasalRate()             { return basalRate; }
     public static int getCartridge()                { return cartridge; }
@@ -34,6 +35,7 @@ public class Data {
     public static boolean isBolusAmountInMl()       { return isBolusAmountInMl; }
     public static int getBolusLock()                { return bolusLock; }
     public static int getBoliPerHour()              { return boliPerHour; }
+    public static double getMinimalRuntime()        { return round(Calculation.getMinimumRuntime(), 1); }
 
 
     // ===== PHARMACY SETTERS ===== //
@@ -82,7 +84,6 @@ public class Data {
         Data.boliPerHour = boliPerHour;
         bolusLock = Calculation.getBolusLock();
     }
-
 
     // ===== AUXILIARY FUNCTIONS ===== //
     private static double round(double d, int decimalPlace) {

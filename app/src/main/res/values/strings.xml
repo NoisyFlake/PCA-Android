@@ -5,6 +5,7 @@
 
     <string name="dosage_result_mg_ml">mg/ml</string>
 
+    <string name="label_min_runtime">Minimale Laufzeit</string>
     <string name="label_basal_rate">Basalrate in mg/h</string>
     <string name="label_boli_per_hour">Boli pro Stunde</string>
     <string name="label_basal_rate_pump">Kontinuierliche Rate pro h</string>

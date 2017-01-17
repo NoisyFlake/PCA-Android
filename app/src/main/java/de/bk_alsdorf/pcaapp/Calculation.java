@@ -43,13 +43,20 @@ public class Calculation {
     }
 
     // Minimale Laufzeit = Kassettenvolumen / ( Basalrate + ( Anzahl Boli pro Stunde * Wirkstoffmenge je Bolus ))
-    /* public static BigDecimal getMinimumRuntime(BigDecimal bolusAmount, int bolusPerHour, BigDecimal basalRate, int tankVolume) {
-        BigDecimal maxBoliAgentPerHour = bolusAmount.multiply(new BigDecimal(bolusPerHour));
-        BigDecimal maxAgentPerHour = basalRate.add(maxBoliAgentPerHour);
+    public static double getMinimumRuntime() {
 
-        if (maxAgentPerHour.compareTo(new BigDecimal(0)) == 0) return new BigDecimal(0);
-        return new BigDecimal(tankVolume).divide(maxAgentPerHour, 1, RoundingMode.HALF_UP);
-    } */
+        double bolusAmount = Data.getBolusAmount();
+        int bolusPerHour = Data.getBoliPerHour();
+        double basalRate = Data.getBasalRate();
+        int tankVolume = Data.getCartridge();
+
+        double maxBoliAgentPerHour = bolusAmount * bolusPerHour;
+        double maxAgentPerHour = basalRate + maxBoliAgentPerHour;
+
+        if (maxAgentPerHour == 0)return 0;
+
+        return tankVolume/maxAgentPerHour;
+    }
 
     //Basalrate in ml = Basalrate * (1 / Wirkstoffkonzentration)
     public static double convertMgToMl(double mg) {
