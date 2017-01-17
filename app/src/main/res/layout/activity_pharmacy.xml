@@ -88,9 +88,16 @@
 
             <TextView
                 android:id="@+id/durationSeekBarCurrentValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="10" />
+                android:text="10"
+                android:textSize="14sp"
+                android:textAlignment="center"
+                android:background="@drawable/rounded_corner"
+                android:elevation="1dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="24dp"
+                android:paddingTop="3dp"
+                android:layout_height="24dp"
+                android:layout_marginBottom="1dp" />
 
         </LinearLayout>
 
