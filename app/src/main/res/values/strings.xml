@@ -34,7 +34,7 @@
     <string name="title_result">Schmerzmittelversorgung</string>
 
     <string name="disclaimer">
-        Diese Anwendung dient nur zu Schulungszwecken und ist kein Zubehör für Medizinprodukte.
+        Diese Anwendung dient nur zu Schulungszwecken und ist kein Zubehör für Medizinprodukte.\n\n
         Die Korrektheit der berechneten Werte ist nicht gewährleistet.
     </string>
 
