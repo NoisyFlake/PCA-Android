@@ -12,3 +12,4 @@ and then import it in Android Studio.
 
 ## Disclaimer
 This program is free software and comes with ABSOLUTELY NO WARRANTY, to the extent permitted by applicable law.
+It should only be used for training purposes and not as a reliable medical calculator.
