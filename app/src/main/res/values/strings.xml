@@ -33,6 +33,13 @@
     <string name="title_pump">Pumpeneinstellungen</string>
     <string name="title_result">Schmerzmittelversorgung</string>
 
+    <string name="disclaimer">
+        Diese Anwendung dient nur zu Schulungszwecken und ist kein Zubehör für Medizinprodukte.
+        Die Korrektheit der berechneten Werte ist nicht gewährleistet.
+    </string>
+
+    <string name="version">v1.0</string>
+
     <string name="screenshot_was_saved">Das Bild wurde gespeichert.</string>
 
     <string-array name="array_volume_cartridge">

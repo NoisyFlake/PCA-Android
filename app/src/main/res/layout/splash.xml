@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:weightSum="1">
+
+    <ImageView android:id="@+id/splashscreen" android:layout_width="wrap_content"
+        android:layout_height="214dp"
+        android:src="@drawable/logo"
+        android:layout_gravity="center" />
+
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/disclaimer"
+        android:textSize="@dimen/font_size_md"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:gravity="center" />
+
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/version"
+        android:textSize="@dimen/font_size_md"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:layout_gravity="bottom"
+        android:gravity="center" />
+
+</LinearLayout>
